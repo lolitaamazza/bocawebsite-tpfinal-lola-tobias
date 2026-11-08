@@ -1,0 +1,30 @@
+import { create } from 'zustand'
+import { site } from '../config/site'
+let toastTimer = 0
+/** Estado de la UI. La escena 3D lo lee con getState() por frame, sin re-renders. */
+export const useVestuario = create((set) => ({
+  phase: 'loading',
+  progress: 0,
+  filter: null,
+  hover: null,
+  selected: null,
+  more: false,
+  searchOpen: false,
+  custom: { name: '', number: '', size: site.store.defaultSize },
+  sound: false,
+  toast: null,
+  setPhase: (phase) => set({ phase }),
+  setProgress: (progress) => set({ progress }),
+  setFilter: (filter) => set({ filter }),
+  setHover: (hover) => set({ hover }),
+  select: (selected) => set((s) => (s.selected === selected ? s : { selected, more: selected ? s.more : false })),
+  setMore: (more) => set({ more }),
+  setSearchOpen: (searchOpen) => set({ searchOpen }),
+  setCustom: (c) => set((s) => ({ custom: { ...s.custom, ...c } })),
+  setSound: (sound) => set({ sound }),
+  showToast: (toast) => {
+    set({ toast })
+    clearTimeout(toastTimer)
+    toastTimer = window.setTimeout(() => set({ toast: null }), 1800)
+  },
+}))

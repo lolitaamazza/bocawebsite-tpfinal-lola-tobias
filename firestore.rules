@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Todo el acceso a datos pasa por el servidor (Server Actions con Firebase Admin,
+// que ignora estas reglas) y valida el uid de la cookie de sesión.
+// Desde el navegador: cada usuario puede LEER solo sus documentos y nadie puede
+// escribir directo. Así, aunque alguien use el SDK cliente con su token, no ve
+// ni toca datos de otro.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner() {
+      return request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    match /jerseys/{id} {
+      allow read: if isOwner();
+      allow write: if false;
+    }
+
+    match /lineups/{id} {
+      allow read: if isOwner();
+      allow write: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

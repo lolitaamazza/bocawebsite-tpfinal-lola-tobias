@@ -1,35 +1,34 @@
 # Modelo 3D de la remera
 
-## Estado actual
+## Qué se usa
 
-`public/models/camiseta.glb` es el modelo de [sdhuesca.bellostas.studio](https://sdhuesca.bellostas.studio/) (Bellostas Studio, exportado de Blender). Se usa **solo como placeholder para desarrollo local**: no tiene licencia, no está en git y no se publica con él. `npm run model:placeholder` lo baja.
+`public/models/camiseta.glb`: remera + percha + gancho, el modelo de [sdhuesca.bellostas.studio](https://sdhuesca.bellostas.studio/) (Bellostas Studio, exportado de Blender). Es el modelo elegido para el proyecto.
 
-## Qué tiene que tener el modelo propio
+**Licencia:** el GLB no trae licencia. Hoy está en `.gitignore` y se baja con `bash scripts/fetch_placeholder_model.sh`. Para el deploy en Vercel tiene que estar en el repo (o servido desde otro lado), y eso implica publicarlo: es una decisión del equipo.
 
-El código (`src/three/assets.ts`) busca tres mallas por prefijo de nombre:
+Si el archivo no está o no carga, `src/three/assets.js` usa una remera equivalente **generada por código** (`src/three/model/`), con el mismo layout UV, así el sitio nunca queda vacío.
+
+## Contrato del modelo
+
+`src/three/assets.js` busca tres mallas por prefijo de nombre:
 
 | Malla | Uso | Atributos |
 | --- | --- | --- |
-| `camiseta*` | la remera | `POSITION`, `NORMAL`, `TEXCOORD_0`, `COLOR_0` (oclusión horneada, opcional pero suma mucho) |
-| `percha*` | la percha de madera | `POSITION`, `NORMAL` |
-| `gancho*` | el gancho de metal | `POSITION`, `NORMAL` |
+| `camiseta*` | la remera | `POSITION`, `NORMAL`, `TEXCOORD_0`, `COLOR_0` (oclusión) |
+| `percha*` | percha de madera | `POSITION`, `NORMAL` |
+| `gancho*` | gancho de metal | `POSITION`, `NORMAL` |
 
-Convenciones del placeholder, que conviene respetar:
-
-- Metros. Origen en el punto donde el gancho apoya en el riel; la remera cuelga hacia −Y (≈ 0,77 m de largo, ≈ 0,59 m de ancho con mangas).
+- Metros. Origen donde el gancho apoya en el riel; la remera cuelga hacia −Y.
 - La espalda mira a +Z (es lo que se ve en primer plano), el frente a −Z.
-- **UV en atlas frente | espalda**: `u < 0.5` frente, `u > 0.5` espalda, cada mitad una proyección casi plana de su cara. Islas extra (mangas) pueden ir en los costados de la mitad del frente.
-- Sin materiales: los pone el código.
+- UV en atlas frente | espalda: `u < 0.5` frente, `u > 0.5` espalda, cada mitad una proyección casi plana.
 
-## Cambiarlo
+## Si cambia el modelo
 
-1. Exportar el GLB con esas mallas y dejarlo en `public/models/camiseta.glb`.
-2. `npm run uv:fit` y pegar los dos coeficientes `FRONT` / `BACK` que imprime en `src/three/kit/uvMap.ts`.
-3. Si el layout UV cambia de forma (no solo de escala), revisar en `src/three/kit/kitSpec.ts` las posiciones en px de plantilla del cuello, los vivos, los puños y los logos. `python3 scripts/uv_fit.py public/models/camiseta.glb --png uv.png` dibuja la malla sobre la plantilla de 1600 × 1035 para ubicarlos.
-4. `npm run gate` y mirarlo en `npm run dev` (frente: tocá la remera en primer plano para darla vuelta).
-5. Sacar `public/models/camiseta.glb` del `.gitignore` y commitear el modelo propio.
+1. Dejar el GLB nuevo en `public/models/camiseta.glb`.
+2. `npm run uv:fit` y pegar los coeficientes `FRONT` / `BACK` en `src/three/kit/uvMap.js`.
+3. Si cambia la forma del layout UV, revisar en `src/three/kit/kitSpec.js` las posiciones del cuello, vivos, puños y logos (`python3 scripts/uv_fit.py public/models/camiseta.glb --png uv.png` dibuja la malla sobre la plantilla).
+4. `npm run gate` y mirarlo en `npm run dev`.
 
-## Opciones para conseguirlo
+## La remera generada por código
 
-- Modelarlo en Blender (cloth sim sobre una percha, retopo, UV por proyección frente/espalda). Es lo que da el mismo nivel que el original.
-- Partir de una remera CC0/CC-BY (Sketchfab, Poly Pizza), rehacer las UV como atlas frente | espalda y agregar percha y gancho.
+`src/three/model/shirtGeometry.js` (puro, testeado) arma dos caras "infladas" desde una silueta propia (`silhouette.js`): triangulación de Delaunay, volumen según la distancia a las costuras (cuello, puños y bajo quedan abiertos y se ve el forro), pliegues hacia el bajo y oclusión en los colores de vértice. Las UV salen de la misma fórmula que la textura, así que se pinta igual que el GLB.

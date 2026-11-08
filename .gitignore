@@ -1,9 +1,13 @@
 node_modules
 dist
+.next
+out
+next-env.d.ts
 scripts/.cache
 .DS_Store
 *.log
 .env*
+!.env.example
 .vercel
 
 # Modelo de remera de Bellostas Studio: placeholder local, no se redistribuye
