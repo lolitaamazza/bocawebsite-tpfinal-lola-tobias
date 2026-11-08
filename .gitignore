@@ -1,0 +1,10 @@
+node_modules
+dist
+scripts/.cache
+.DS_Store
+*.log
+.env*
+.vercel
+
+# Modelo de remera de Bellostas Studio: placeholder local, no se redistribuye
+public/models/camiseta.glb

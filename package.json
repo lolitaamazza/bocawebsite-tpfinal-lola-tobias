@@ -1,0 +1,47 @@
+{
+  "name": "boca-vestuario",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "El vestuario de Boca en 3D: una remera por jugador del plantel. Tributo no oficial.",
+  "scripts": {
+    "dev": "vite --port 4950 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4951",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "gate": "vitest run && tsc --noEmit && vite build",
+    "data": "python3 scripts/fetch_squad.py",
+    "eval": "python3 scripts/squad_drift.py",
+    "model:placeholder": "bash scripts/fetch_placeholder_model.sh",
+    "uv:fit": "python3 scripts/uv_fit.py public/models/camiseta.glb",
+    "prepare": "git config core.hooksPath .githooks || true"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/chakra-petch": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@gsap/react": "^2.1.2",
+    "@react-three/fiber": "^9.8.2",
+    "gsap": "^3.15.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0",
+    "zustand": "^5.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "jsdom": "^31.0.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  }
+}

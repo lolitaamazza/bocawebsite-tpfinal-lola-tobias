@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Gate rápido (<2 s): tests determinísticos. El typecheck y el build corren con `npm run gate`.
+set -e
+npx vitest run --reporter=dot

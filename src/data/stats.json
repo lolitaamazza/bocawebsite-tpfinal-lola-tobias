@@ -1,0 +1,309 @@
+{
+ "meta": {
+  "source": "Transfermarkt",
+  "competition": "Torneo Clausura 2026",
+  "fetched": "2026-11-08"
+ },
+ "players": {
+  "1": {
+   "conv": 14,
+   "pj": 14,
+   "tit": 14,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 1260
+  },
+  "12": {
+   "conv": 16,
+   "pj": 2,
+   "tit": 2,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 180
+  },
+  "30": {
+   "conv": 4,
+   "pj": 0,
+   "tit": 0,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 0
+  },
+  "2": {
+   "conv": 15,
+   "pj": 14,
+   "tit": 13,
+   "goles": 2,
+   "asist": 1,
+   "ta": 3,
+   "tr": 0,
+   "min": 1182
+  },
+  "32": {
+   "conv": 12,
+   "pj": 6,
+   "tit": 4,
+   "goles": 0,
+   "asist": 0,
+   "ta": 4,
+   "tr": 0,
+   "min": 360
+  },
+  "42": {
+   "conv": 12,
+   "pj": 8,
+   "tit": 6,
+   "goles": 1,
+   "asist": 0,
+   "ta": 4,
+   "tr": 0,
+   "min": 517
+  },
+  "3": {
+   "conv": 15,
+   "pj": 15,
+   "tit": 14,
+   "goles": 0,
+   "asist": 4,
+   "ta": 3,
+   "tr": 0,
+   "min": 1259
+  },
+  "17": {
+   "conv": 11,
+   "pj": 10,
+   "tit": 9,
+   "goles": 1,
+   "asist": 0,
+   "ta": 1,
+   "tr": 0,
+   "min": 760
+  },
+  "24": {
+   "conv": 16,
+   "pj": 7,
+   "tit": 5,
+   "goles": 0,
+   "asist": 2,
+   "ta": 1,
+   "tr": 0,
+   "min": 500
+  },
+  "26": {
+   "conv": 14,
+   "pj": 8,
+   "tit": 6,
+   "goles": 0,
+   "asist": 0,
+   "ta": 1,
+   "tr": 0,
+   "min": 563
+  },
+  "27": {
+   "conv": 12,
+   "pj": 3,
+   "tit": 3,
+   "goles": 0,
+   "asist": 0,
+   "ta": 2,
+   "tr": 0,
+   "min": 270
+  },
+  "46": {
+   "conv": 3,
+   "pj": 2,
+   "tit": 1,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 91
+  },
+  "4": {
+   "conv": 16,
+   "pj": 3,
+   "tit": 3,
+   "goles": 0,
+   "asist": 0,
+   "ta": 1,
+   "tr": 0,
+   "min": 270
+  },
+  "10": {
+   "conv": 7,
+   "pj": 7,
+   "tit": 5,
+   "goles": 0,
+   "asist": 1,
+   "ta": 0,
+   "tr": 0,
+   "min": 464
+  },
+  "18": {
+   "conv": 14,
+   "pj": 13,
+   "tit": 13,
+   "goles": 0,
+   "asist": 1,
+   "ta": 4,
+   "tr": 0,
+   "min": 1074
+  },
+  "25": {
+   "conv": 15,
+   "pj": 15,
+   "tit": 13,
+   "goles": 3,
+   "asist": 2,
+   "ta": 2,
+   "tr": 0,
+   "min": 1184
+  },
+  "5": {
+   "conv": 13,
+   "pj": 11,
+   "tit": 9,
+   "goles": 0,
+   "asist": 1,
+   "ta": 4,
+   "tr": 0,
+   "min": 785
+  },
+  "7": {
+   "conv": 12,
+   "pj": 8,
+   "tit": 2,
+   "goles": 0,
+   "asist": 1,
+   "ta": 1,
+   "tr": 0,
+   "min": 286
+  },
+  "8": {
+   "conv": 8,
+   "pj": 6,
+   "tit": 2,
+   "goles": 1,
+   "asist": 1,
+   "ta": 2,
+   "tr": 0,
+   "min": 205
+  },
+  "15": {
+   "conv": 15,
+   "pj": 5,
+   "tit": 3,
+   "goles": 0,
+   "asist": 0,
+   "ta": 1,
+   "tr": 0,
+   "min": 241
+  },
+  "23": {
+   "conv": 8,
+   "pj": 5,
+   "tit": 3,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 248
+  },
+  "6": {
+   "conv": 4,
+   "pj": 1,
+   "tit": 1,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 90
+  },
+  "19": {
+   "conv": 16,
+   "pj": 15,
+   "tit": 13,
+   "goles": 3,
+   "asist": 2,
+   "ta": 2,
+   "tr": 0,
+   "min": 1093
+  },
+  "22": {
+   "conv": 15,
+   "pj": 14,
+   "tit": 7,
+   "goles": 0,
+   "asist": 3,
+   "ta": 0,
+   "tr": 0,
+   "min": 702
+  },
+  "16": {
+   "conv": 16,
+   "pj": 14,
+   "tit": 11,
+   "goles": 5,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 887
+  },
+  "28": {
+   "conv": 0,
+   "pj": 0,
+   "tit": 0,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 0
+  },
+  "20": {
+   "conv": 14,
+   "pj": 13,
+   "tit": 7,
+   "goles": 2,
+   "asist": 0,
+   "ta": 2,
+   "tr": 0,
+   "min": 531
+  },
+  "9": {
+   "conv": 12,
+   "pj": 3,
+   "tit": 0,
+   "goles": 0,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 72
+  },
+  "13": {
+   "conv": 10,
+   "pj": 10,
+   "tit": 3,
+   "goles": 3,
+   "asist": 2,
+   "ta": 1,
+   "tr": 0,
+   "min": 354
+  },
+  "11": {
+   "conv": 13,
+   "pj": 6,
+   "tit": 2,
+   "goles": 2,
+   "asist": 0,
+   "ta": 0,
+   "tr": 0,
+   "min": 231
+  }
+ }
+}
