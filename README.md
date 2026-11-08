@@ -2,6 +2,8 @@
 
 > TP Final · Programación III · UMAI — Lola Amazza y Tobías Arraiza
 > Next.js 16 (App Router, JavaScript) · Firebase Auth · Cloud Firestore · Three.js · Vercel
+>
+> **App publicada: https://boca-vestuario.vercel.app**
 
 **Propuesta:** un vestuario 3D de Boca Juniors donde cualquier hincha recorre las camisetas del plantel 2026, y con su cuenta diseña y guarda sus propias remeras y arma su XI ideal.
 
@@ -129,6 +131,18 @@ npm run dev                     # http://localhost:4950
 | `npm run seed` | crea el usuario de prueba con datos de ejemplo |
 | `npm run eval` | compara el plantel publicado con Transfermarkt en vivo |
 | `npm run data` | regenera plantel, estadísticas y retratos |
+
+## Deploy
+
+Vercel, proyecto `boca-vestuario`, funciones en `gru1` (São Paulo, junto a Firestore). Las variables de `.env.local` están cargadas en el entorno de producción y `boca-vestuario.vercel.app` está en los dominios autorizados de Firebase Auth.
+
+```bash
+vercel deploy --prod
+```
+
+Dos detalles que hacen falta para que Firebase Admin cargue en Vercel:
+- `engines.node: 24.x` en `package.json`.
+- `overrides: { "jwks-rsa": "3.2.2" }`: la 4.x pide `jose` 6 (solo ESM) con `require()`, y el runtime de Vercel no permite `require()` de módulos ESM (`ERR_REQUIRE_ESM`). La 3.2.2 usa `jose` 4, que trae CommonJS, y `firebase-admin` la usa con la misma API.
 
 ## Usuario de prueba
 

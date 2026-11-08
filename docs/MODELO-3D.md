@@ -4,7 +4,7 @@
 
 `public/models/camiseta.glb`: remera + percha + gancho, el modelo de [sdhuesca.bellostas.studio](https://sdhuesca.bellostas.studio/) (Bellostas Studio, exportado de Blender). Es el modelo elegido para el proyecto.
 
-**Licencia:** el GLB no trae licencia. Hoy está en `.gitignore` y se baja con `bash scripts/fetch_placeholder_model.sh`. Para el deploy en Vercel tiene que estar en el repo (o servido desde otro lado), y eso implica publicarlo: es una decisión del equipo.
+**Licencia:** el GLB no trae licencia. El equipo decidió versionarlo y publicarlo con el sitio, con crédito a Bellostas Studio en el pie y en el README.
 
 Si el archivo no está o no carga, `src/three/assets.js` usa una remera equivalente **generada por código** (`src/three/model/`), con el mismo layout UV, así el sitio nunca queda vacío.
 
