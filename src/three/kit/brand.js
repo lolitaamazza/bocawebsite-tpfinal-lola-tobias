@@ -37,14 +37,15 @@ const text = (path) =>
     return r.text()
   })
 export async function loadBrand(colors) {
-  const [crest, adidas, betsson, cetrogar] = await Promise.all(
-    ['/brand/escudo.svg', '/brand/adidas.svg', '/brand/betsson.svg', '/brand/cetrogar.svg'].map(text),
+  const [crest, adidas, betsson, cetrogar, directv] = await Promise.all(
+    ['/brand/escudo.svg', '/brand/adidas.svg', '/brand/betsson.svg', '/brand/cetrogar.svg', '/brand/directv.svg'].map(text),
   )
-  const [a, b, c, d] = await Promise.all([
+  const [a, b, c, d, e] = await Promise.all([
     loadSvg(crest, 2),
     loadSvg(recolorSvg(adidas, colors.gold), 6),
     loadSvg(recolorSvg(betsson, colors.navy), 12),
     loadSvg(recolorSvg(cetrogar, colors.gold), 6),
+    loadSvg(recolorSvg(directv, colors.gold), 4),
   ])
-  return { crest: a, adidas: b, betsson: c, cetrogar: d }
+  return { crest: a, adidas: b, betsson: c, cetrogar: d, directv: e }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { site } from '../../config/site'
 import { Icon } from '../ui/Icon'
 /**
@@ -41,7 +42,7 @@ export function Header({ search, filters, account, hideFiltersOnMobile, onCustom
 
       <nav
         className="contents md:flex md:flex-wrap md:items-center md:justify-end md:gap-1.5"
-        aria-label="Buscar y filtrar el plantel"
+        aria-label="Vestuario y museo"
       >
         <div className="pointer-events-auto flex items-center gap-2 md:relative">
           <button
@@ -59,6 +60,12 @@ export function Header({ search, filters, account, hideFiltersOnMobile, onCustom
         <div
           className={`pointer-events-auto scrollbar-none col-span-3 -mx-4 flex gap-2 overflow-x-auto px-4 md:col-span-1 md:mx-0 md:flex-wrap md:justify-end md:gap-1.5 md:overflow-visible md:px-0 ${hideFiltersOnMobile ? 'max-md:portrait:hidden' : ''}`}
         >
+          <Link
+            href="/museo"
+            className="eyebrow inline-flex shrink-0 items-center rounded-full border border-oro/45 px-3 tracking-[0.08em] text-oro hover:border-oro focus-visible:outline-2 focus-visible:outline-oro"
+          >
+            Museo
+          </Link>
           {filters}
         </div>
       </nav>

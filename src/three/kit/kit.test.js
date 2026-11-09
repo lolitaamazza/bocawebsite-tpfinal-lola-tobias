@@ -34,13 +34,13 @@ describe('uvMap', () => {
     const t = kit.lettering
     expect(t.numberCentre - t.numberCap / 2).toBeGreaterThan(t.nameBaseline)
   })
-  it('la franja cruza el número por su mitad baja, como en la foto de espalda', () => {
+  it('el sponsor queda debajo de la franja y del dorsal', () => {
     const t = kit.lettering
     const bandRow = rowAt('back', kit.band.centre)
-    const top = t.numberCentre - t.numberCap / 2
-    const at = (bandRow - top) / t.numberCap
-    expect(at).toBeGreaterThan(0.45)
-    expect(at).toBeLessThan(0.8)
+    const bandBottom = bandRow + (kit.band.half + kit.band.royal) * pxPerMetre('back')
+    const sponsorTop = kit.backMarks.directv.y - kit.backMarks.directv.w * 31 / 192 / 2
+    expect(sponsorTop).toBeGreaterThan(bandBottom)
+    expect(sponsorTop).toBeGreaterThan(t.numberCentre + t.numberCap / 2)
   })
 })
 describe('lettering', () => {

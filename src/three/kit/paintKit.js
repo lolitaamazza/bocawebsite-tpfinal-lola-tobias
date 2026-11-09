@@ -21,6 +21,7 @@ export function paintBase(brand, k, kit = defaultKit) {
     paintBand(ctx, kit, side)
     paintTrims(ctx, kit, side)
     if (side === 'front') paintFrontLogos(ctx, kit, brand)
+    else paintBackMarks(ctx, kit, brand)
     ctx.restore()
   }
   return canvas
@@ -49,6 +50,14 @@ function paintBand(ctx, kit, side) {
   const s = pxPerMetre(side)
   const h = half * s
   const r = royal * s
+  ctx.save()
+  ctx.beginPath()
+  for (const [index, [x, y]] of kit.band.torso[side].entries()) {
+    if (index === 0) ctx.moveTo(x, y)
+    else ctx.lineTo(x, y)
+  }
+  ctx.closePath()
+  ctx.clip()
   ctx.fillStyle = kit.colors.royal
   ctx.fillRect(0, yc - h - r, TEMPLATE_W, h * 2 + r * 2)
   const g = ctx.createLinearGradient(0, yc - h, 0, yc + h)
@@ -56,6 +65,7 @@ function paintBand(ctx, kit, side) {
   g.addColorStop(1, kit.colors.goldDeep)
   ctx.fillStyle = g
   ctx.fillRect(0, yc - h, TEMPLATE_W, h * 2)
+  ctx.restore()
 }
 function stroke(ctx, pts, width, color) {
   ctx.beginPath()
@@ -68,8 +78,12 @@ function stroke(ctx, pts, width, color) {
 }
 function paintTrims(ctx, kit, side) {
   const { gold, navy, lining } = kit.colors
-  const p = kit.piping
-  for (const line of Object.values(p[side])) stroke(ctx, line, p.width, gold)
+  const shoulders = kit.shoulders
+  for (const line of shoulders[side]) {
+    for (let stripe = 0; stripe < 3; stripe++) {
+      stroke(ctx, line.map(([x, y]) => [x, y + stripe * shoulders.spacing]), shoulders.width, gold)
+    }
+  }
   for (const cuff of kit.cuffs[side]) stroke(ctx, cuff, kit.cuffs.width, gold)
   if (side === 'back') {
     stroke(ctx, kit.backCollar, 12, gold)
@@ -120,6 +134,16 @@ function paintFrontLogos(ctx, kit, brand) {
   ctx.restore()
   drawImage(ctx, brand.betsson, 400, rowAt('front', kit.band.centre), l.betsson.w)
   for (const c of l.cetrogar) drawImage(ctx, brand.cetrogar, c.x, c.y, c.w, c.rot)
+}
+function paintBackMarks(ctx, kit, brand) {
+  const { neck, directv } = kit.backMarks
+  ctx.fillStyle = kit.colors.gold
+  ctx.font = `italic 700 ${neck.size}px Arial, sans-serif`
+  ctx.textAlign = 'center'
+  ctx.fillText(neck.text, neck.x, neck.baseline)
+  drawImage(ctx, brand.directv, directv.x, directv.y, directv.w)
+  drawImage(ctx, brand.cetrogar, 104, 382, 87, 0.13)
+  drawImage(ctx, brand.cetrogar, 689, 357, 87, -0.13)
 }
 /**
  * Atlas final de un jugador: la base + nombre y número en la espalda.
