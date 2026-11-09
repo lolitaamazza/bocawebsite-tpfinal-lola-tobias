@@ -1,0 +1,62 @@
+{
+ "libertadores": {
+  "src": "/logros/libertadores.webp",
+  "width": 271,
+  "height": 413,
+  "caption": "Zanabria festeja la primera Libertadores, 1977.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "1977-09-14",
+  "page": "https://commons.wikimedia.org/wiki/File:Zanabria_celebrando_libertadores.jpg"
+ },
+ "intercontinental": {
+  "src": "/logros/intercontinental.webp",
+  "width": 1400,
+  "height": 3031,
+  "caption": "La camiseta del 2000 en el Museo de la Pasión Boquense.",
+  "author": "BugWarp",
+  "license": "CC BY-SA 4.0",
+  "date": "2024-01-21",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_de_la_Pasi%C3%B3n_Boquense_en_enero_de_2024_-_BugWarp_10.jpg"
+ },
+ "liga": {
+  "src": "/logros/liga.webp",
+  "width": 1400,
+  "height": 1050,
+  "caption": "Trofeos en el Museo de la Pasión Boquense.",
+  "author": "Javier666rock",
+  "license": "CC BY-SA 4.0",
+  "date": "2010-09-17",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_Copas_Boca.jpg"
+ },
+ "sudamericana": {
+  "src": "/logros/sudamericana.webp",
+  "width": 1400,
+  "height": 3031,
+  "caption": "Vitrina del Museo de la Pasión Boquense, 2024.",
+  "author": "BugWarp",
+  "license": "CC BY-SA 4.0",
+  "date": "2024-01-21",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_de_la_Pasi%C3%B3n_Boquense_en_enero_de_2024_-_BugWarp_07.jpg"
+ },
+ "internacionales": {
+  "src": "/logros/internacionales.webp",
+  "width": 1400,
+  "height": 645,
+  "caption": "Camisetas de las grandes noches en el museo del club, 2024.",
+  "author": "BugWarp",
+  "license": "CC BY-SA 4.0",
+  "date": "2024-01-21",
+  "page": "https://commons.wikimedia.org/wiki/File:Museo_de_la_Pasi%C3%B3n_Boquense_en_enero_de_2024_-_BugWarp_01.jpg"
+ },
+ "copa-argentina": {
+  "src": "/logros/copa-argentina.webp",
+  "width": 298,
+  "height": 199,
+  "caption": "Boca y Atlanta en la Copa Argentina de 1969.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "1969-07-27",
+  "page": "https://commons.wikimedia.org/wiki/File:Boca_v_atlanta_copa_argentina_1969.jpg"
+ }
+}

@@ -11,6 +11,7 @@ import { createEdgePush, stepEdgePush } from '@/engine/rail'
 import { VIEW_COOLDOWN, useVestuario } from '@/store/vestuario'
 import { Panel } from './Panel'
 import { QuickLinks } from './QuickLinks'
+import { Vitrina } from './Vitrina'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -205,6 +206,54 @@ export function HistoriaSection() {
             },
           })
         })
+        // Vitrina: líneas de la cuadrícula que se dibujan, tarjetas a distinta velocidad,
+        // fotos con paralaje vertical y números que cuentan hasta su valor
+        gsap.utils.toArray('[data-gridline]', scroller).forEach((line, i) => {
+          gsap.fromTo(
+            line,
+            { scaleY: 0 },
+            {
+              scaleY: 1,
+              ease: 'none',
+              scrollTrigger: { trigger: line.parentElement, scroller, start: 'top 85%', end: 'top 15%', scrub: true },
+              delay: i * 0.02,
+            },
+          )
+        })
+        gsap.utils.toArray('[data-speed]', scroller).forEach((card) => {
+          const speed = Number(card.dataset.speed) || 1
+          gsap.fromTo(
+            card,
+            { y: 140 * speed },
+            {
+              y: -140 * speed,
+              ease: 'none',
+              scrollTrigger: { trigger: card, scroller, start: 'top bottom', end: 'bottom top', scrub: true },
+            },
+          )
+        })
+        gsap.utils.toArray('[data-vparallax]', scroller).forEach((img) => {
+          gsap.fromTo(
+            img,
+            { yPercent: -10 },
+            {
+              yPercent: 10,
+              ease: 'none',
+              scrollTrigger: { trigger: img.parentElement, scroller, start: 'top bottom', end: 'bottom top', scrub: true },
+            },
+          )
+        })
+        gsap.utils.toArray('[data-count]', scroller).forEach((el) => {
+          const to = Number(el.dataset.count)
+          const n = { v: 0 }
+          gsap.to(n, {
+            v: to,
+            duration: 1.4,
+            ease: 'power3.out',
+            onUpdate: () => (el.textContent = String(Math.round(n.v))),
+            scrollTrigger: { trigger: el, scroller, start: 'top 85%', once: true },
+          })
+        })
         gsap.utils.toArray('[data-reveal-up]', scroller).forEach((el) => {
           gsap.from(el, {
             y: 40,
@@ -338,6 +387,8 @@ export function HistoriaSection() {
               </div>
             </div>
           </div>
+
+          <Vitrina />
 
           {/* atajos */}
           <div className="py-[18vh]">

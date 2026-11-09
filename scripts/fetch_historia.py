@@ -15,6 +15,7 @@ Uso: python3 scripts/fetch_historia.py
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import re
@@ -51,6 +52,16 @@ PHOTOS = {
     "2026": ('Vista aérea del Estadio Alberto J. Armando "La Bombonera" 08.jpg', "La Bombonera desde el aire, 2025."),
 }
 
+# Logros (vitrina): id -> (archivo en Commons, epígrafe)
+LOGROS = {
+    "libertadores": ("Zanabria celebrando libertadores.jpg", "Zanabria festeja la primera Libertadores, 1977."),
+    "intercontinental": ("Museo de la Pasión Boquense en enero de 2024 - BugWarp 10.jpg", "La camiseta del 2000 en el Museo de la Pasión Boquense."),
+    "liga": ("Museo Copas Boca.jpg", "Trofeos en el Museo de la Pasión Boquense."),
+    "sudamericana": ("Museo de la Pasión Boquense en enero de 2024 - BugWarp 07.jpg", "Vitrina del Museo de la Pasión Boquense, 2024."),
+    "internacionales": ("Museo de la Pasión Boquense en enero de 2024 - BugWarp 01.jpg", "Camisetas de las grandes noches en el museo del club, 2024."),
+    "copa-argentina": ("Boca v atlanta copa argentina 1969.jpg", "Boca y Atlanta en la Copa Argentina de 1969."),
+}
+
 clean = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", html.unescape(s or ""))).strip()
 
 
@@ -68,25 +79,26 @@ def api_info(titles: list[str]) -> dict:
     return out
 
 
-def main() -> None:
-    OUT_IMG.mkdir(parents=True, exist_ok=True)
+def download(photos: dict, out_img: Path, out_json: Path, folder: str) -> int:
+    out_img.mkdir(parents=True, exist_ok=True)
     CACHE.mkdir(parents=True, exist_ok=True)
-    info = api_info([t for t, _ in PHOTOS.values()])
+    info = api_info([t for t, _ in photos.values()])
     credits = {}
-    for pid, (title, caption) in PHOTOS.items():
+    for pid, (title, caption) in photos.items():
         ii = info.get(title)
         if not ii:
             raise SystemExit(f"No encontré {title} en Commons")
         m = ii["extmetadata"]
-        raw = CACHE / f"{pid}.jpg"
+        # La caché va por archivo de Commons: si se cambia la foto de una pieza no se reusa la vieja
+        raw = CACHE / f"{folder}-{pid}-{hashlib.sha1(title.encode()).hexdigest()[:10]}.jpg"
         if not raw.exists():
             raw.write_bytes(urllib.request.urlopen(urllib.request.Request(ii["thumburl"], headers=UA), timeout=60).read())
             time.sleep(1)
-        target = OUT_IMG / f"{pid}.webp"
+        target = out_img / f"{pid}.webp"
         subprocess.run(["cwebp", "-quiet", "-q", "80", "-resize", "1400", "0", str(raw), "-o", str(target)], check=True)
         artist = clean(m.get("Artist", {}).get("value")) or "Autor desconocido"
         credits[pid] = {
-            "src": f"/historia/{pid}.webp",
+            "src": f"/{folder}/{pid}.webp",
             "width": min(ii["width"], 1400),
             "height": round(ii["height"] * min(1, 1400 / ii["width"])),
             "caption": caption,
@@ -95,8 +107,14 @@ def main() -> None:
             "date": clean(m.get("DateTimeOriginal", {}).get("value"))[:10],
             "page": ii["descriptionurl"],
         }
-    OUT_JSON.write_text(json.dumps(credits, ensure_ascii=False, indent=1) + "\n", "utf-8")
-    print(f"{len(credits)} fotos en public/historia/ y créditos en {OUT_JSON.relative_to(ROOT)}")
+    out_json.write_text(json.dumps(credits, ensure_ascii=False, indent=1) + "\n", "utf-8")
+    print(f"{len(credits)} fotos en public/{folder}/ y créditos en {out_json.relative_to(ROOT)}")
+    return len(credits)
+
+
+def main() -> None:
+    download(PHOTOS, OUT_IMG, OUT_JSON, "historia")
+    download(LOGROS, ROOT / "public" / "logros", ROOT / "src" / "data" / "logros-fotos.json", "logros")
 
 
 if __name__ == "__main__":
