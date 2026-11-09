@@ -80,6 +80,7 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
     })
     // Igual que el original: saltear = recorrer lo que falta a 2.2 "intros por segundo"
     rig.onSkipIntro = () => intro.timeScale(Math.max(intro.timeScale(), 2.2 * INTRO_SECONDS))
+    if (bindStore) rig.onReachEnd = () => useVestuario.getState().setView('historia')
     onRig?.(rig)
 
     // Estado → riel (solo el vestuario público)

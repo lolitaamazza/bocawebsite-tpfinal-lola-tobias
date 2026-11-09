@@ -13,7 +13,12 @@ export const useVestuario = create((set) => ({
   custom: { name: '', number: '', size: site.store.defaultSize },
   sound: false,
   toast: null,
+  /** Qué capa se ve: el vestuario 3D o la Historia (camisetas con fotos reales) */
+  view: 'vestuario',
+  /** El canvas deja de renderizar mientras la Historia lo tapa */
+  stagePaused: false,
   setPhase: (phase) => set({ phase }),
+  setView: (view) => set((s) => (s.view === view ? s : { view, selected: view === 'historia' ? null : s.selected })),
   setProgress: (progress) => set({ progress }),
   setFilter: (filter) => set({ filter }),
   setHover: (hover) => set({ hover }),

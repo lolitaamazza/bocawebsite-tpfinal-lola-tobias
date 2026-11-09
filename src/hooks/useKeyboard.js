@@ -9,6 +9,7 @@ export function useKeyboard(rig) {
     if (!rig) return
     const onKey = (e) => {
       const s = useVestuario.getState()
+      if (s.view === 'historia') return
       if (!rig.ready) return rig.onSkipIntro?.()
       const inInput = e.target.closest?.('input, textarea')
       if (inInput) {
@@ -18,6 +19,9 @@ export function useKeyboard(rig) {
       if (e.key === '/' && !s.searchOpen) {
         e.preventDefault()
         s.setSearchOpen(true)
+      } else if ((e.key === 'ArrowDown' || e.key === 'PageDown') && !s.selected && rig.atEnd()) {
+        e.preventDefault()
+        s.setView('historia')
       } else if (e.key === 'Escape') s.select(null)
       else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         rig.kbd = true

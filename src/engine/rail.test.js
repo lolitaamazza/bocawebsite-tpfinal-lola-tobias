@@ -9,6 +9,8 @@ import {
   pickSlot,
   railBounds,
   stepSlot,
+  createEdgePush,
+  stepEdgePush,
 } from './rail'
 const slots = (...pos) => pos.map((p) => ({ pos: p, active: true, restX: 0 }))
 describe('layoutRail', () => {
@@ -83,5 +85,27 @@ describe('neighbourPush', () => {
     expect(neighbourPush(0)).toBe(0)
     expect(neighbourPush(1)).toBeGreaterThan(neighbourPush(5))
     expect(neighbourPush(-1)).toBeCloseTo(-neighbourPush(1))
+  })
+})
+
+describe('stepEdgePush', () => {
+  it('dispara solo con empuje sostenido hacia abajo en el final', () => {
+    const s = createEdgePush()
+    expect(stepEdgePush(s, 200, true, 0)).toBe(false)
+    expect(stepEdgePush(s, 150, true, 100)).toBe(false)
+    expect(stepEdgePush(s, 100, true, 200)).toBe(true)
+    expect(s.amount).toBe(0)
+  })
+
+  it('no dispara si no está en el final o si sube', () => {
+    const s = createEdgePush()
+    expect(stepEdgePush(s, 1000, false, 0)).toBe(false)
+    expect(stepEdgePush(s, -1000, true, 10)).toBe(false)
+  })
+
+  it('un gesto cortado se olvida', () => {
+    const s = createEdgePush()
+    stepEdgePush(s, 400, true, 0)
+    expect(stepEdgePush(s, 100, true, 2000)).toBe(false)
   })
 })

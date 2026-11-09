@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { clamp, damp, lerp } from '../engine/math'
-import { centredSlot, layoutRail, neighbourPush, pickSlot, railBounds, scrollTo, stepSlot } from '../engine/rail'
+import { centredSlot, layoutRail, neighbourPush, pickSlot, railBounds, scrollTo, stepSlot, createEdgePush, stepEdgePush } from '../engine/rail'
 import { stagePose } from '../engine/stage'
 import { clothBend, clothTwist, settleSwing, stepSwing } from '../engine/swing'
 import { frameBus } from './frameBus'
@@ -238,6 +238,8 @@ export class RailRig {
         this.scrollVel = 0
         this.yawVel = 0
       }
+      // Arrastrar más allá de la última remera = seguir a la sección de abajo
+      if (wasDrag && !this.selected && this.scrollTarget - this.bounds.max > 0.22) this.onReachEnd?.()
       if (wasDrag || e.type === 'pointercancel') return
       if (this.selected) {
         // Tocar la remera la da vuelta; tocar afuera cierra la ficha
@@ -258,6 +260,7 @@ export class RailRig {
       e.preventDefault()
       if (skip() || this.selected) return
       const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (stepEdgePush(this.edgePush, d, this.atEnd(), performance.now())) return void this.onReachEnd?.()
       this.scrollTarget += d * 0.0016
     }
     c.addEventListener('pointerdown', down)
@@ -277,6 +280,13 @@ export class RailRig {
   }
   /** Lo engancha la escena para acelerar la intro con el primer toque */
   onSkipIntro
+  /** Se llama al seguir bajando desde la última remera (pasa a la Historia) */
+  onReachEnd
+  edgePush = createEdgePush()
+  /** El riel está quieto contra su final */
+  atEnd() {
+    return this.bounds.max - this.scroll < 0.03 && this.scrollTarget >= this.bounds.max - 0.01
+  }
   // ───────────────────────── texturas ─────────────────────────
   /** Hasta 3 remeras en alta a la vez; la seleccionada nunca baja */
   sharpen(it, k) {
@@ -424,7 +434,7 @@ export class RailRig {
     })
     const h = this.hover
     const caption = h && !this.selected ? this.project(h.x + railX, RAIL_Y + this.assets.size.bottom * h.scale - 0.07, h.z) : null
-    return { groups, caption, stage: !!this.selected, speed: this.selected ? 0 : this.railSpeed }
+    return { groups, caption, stage: !!this.selected, speed: this.selected ? 0 : this.railSpeed, atEnd: !this.selected && this.ready && this.atEnd() }
   }
 }
 export const clampDt = (dt) => clamp(dt, 1 / 240, 1 / 20)

@@ -9,6 +9,8 @@ import { Loader } from '../components/layout/Loader'
 import { Caption } from '../components/overlay/Caption'
 import { GroupLabels } from '../components/overlay/GroupLabels'
 import { Toast } from '../components/overlay/Toast'
+import { EdgeCue } from '../components/overlay/EdgeCue'
+import { HistoriaSection } from '../components/historia/HistoriaSection'
 import { Stage } from '../components/three/Stage'
 import { playerById } from '../data'
 import { useAmbience } from '../hooks/useAmbience'
@@ -118,7 +120,9 @@ export function VestuarioContainer() {
   }, [])
   const touch = typeof matchMedia !== 'undefined' && matchMedia('(hover: none)').matches
   return (
+    <>
     <main
+      id="vestuario-stage"
       ref={root}
       // Enfocar un input dentro de la ficha hace que el navegador desplace el contenedor: se fija en 0
       onScroll={(e) => e.currentTarget.scrollTo(0, 0)}
@@ -135,6 +139,7 @@ export function VestuarioContainer() {
       <Caption />
       <CardContainer ref={card} rig={rig} onCustomize={customize} />
       <Toast />
+      <EdgeCue />
       <Footer
         hint={touch ? 'Deslizá el riel · Tocá para abrir' : 'Arrastrá el riel · Clic para abrir'}
         hintVisible={phase === 'ready' && !selected}
@@ -144,5 +149,7 @@ export function VestuarioContainer() {
       />
       {error ? <Fallback reason={error} /> : <Loader progress={progress} done={phase === 'intro' || phase === 'ready'} />}
     </main>
+    <HistoriaSection />
+    </>
   )
 }

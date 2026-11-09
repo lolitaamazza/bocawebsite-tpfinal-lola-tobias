@@ -85,3 +85,29 @@ export function neighbourPush(offset) {
   if (offset === 0) return 0
   return Math.sign(offset) * 0.22 * Math.exp(-(Math.abs(offset) - 1) / 7)
 }
+
+/**
+ * Empuje en el final del riel: cuando ya no hay más remeras y el usuario sigue
+ * bajando, se acumula el gesto y al pasar el umbral se pasa a la sección
+ * siguiente. Si el gesto se corta más de `idle` ms, arranca de cero; así un
+ * scroll que solo "llegó" al final no dispara la transición sin querer.
+ */
+export const EDGE_PUSH = { threshold: 420, idle: 450 }
+
+export function createEdgePush() {
+  return { amount: 0, last: 0 }
+}
+
+/** Devuelve true cuando el empuje acumulado alcanza el umbral (y lo reinicia) */
+export function stepEdgePush(state, delta, atEnd, now, cfg = EDGE_PUSH) {
+  if (now - state.last > cfg.idle) state.amount = 0
+  state.last = now
+  if (!atEnd || delta <= 0) {
+    state.amount = 0
+    return false
+  }
+  state.amount += delta
+  if (state.amount < cfg.threshold) return false
+  state.amount = 0
+  return true
+}

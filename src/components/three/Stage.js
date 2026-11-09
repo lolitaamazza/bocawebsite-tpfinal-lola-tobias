@@ -6,11 +6,15 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
 import { room } from '../../config/site'
 import { CAMERA_FROM, FOV } from '../../three/RailRig'
 import { Scene } from './Scene'
+import { useVestuario } from '../../store/vestuario'
 /** Lienzo WebGL a pantalla completa. Tono ACES, sombras PCF y un entorno suave para los metales. */
 export function Stage({ assets, mobile, onRig, label, ...sceneProps }) {
+  // Mientras la Historia tapa el vestuario no se renderiza nada (ahorra GPU y batería)
+  const paused = useVestuario((s) => s.stagePaused) && sceneProps.bindStore !== false
   return (
     <Canvas
       className="!absolute inset-0 touch-none outline-none"
+      frameloop={paused ? 'never' : 'always'}
       dpr={[1, mobile ? 1.5 : 2]}
       shadows="percentage"
       camera={{ fov: FOV, near: 0.1, far: 40, position: CAMERA_FROM.toArray() }}
