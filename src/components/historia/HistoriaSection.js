@@ -305,6 +305,7 @@ export function HistoriaSection() {
   const atajos = [
     { label: 'Volver al vestuario 3D', hint: 'El plantel 2026, una remera por jugador.', onClick: () => backTo() },
     { label: 'Personalizá tu remera', hint: 'Tu nombre y tu número, en vivo sobre la titular.', onClick: () => backTo('custom') },
+    { label: 'Journey 2000–2026', hint: 'Año por año, de Tokio al plantel de hoy.', href: '/journey' },
     { label: 'Mis remeras', hint: 'Las que diseñaste y guardaste en tu cuenta.', href: '/mis-remeras' },
     { label: 'Mi XI ideal', hint: 'Armá el equipo que pondrías vos.', href: '/mi-xi' },
     { label: 'El museo completo', hint: 'Todas las piezas con sus fuentes.', href: '/museo' },

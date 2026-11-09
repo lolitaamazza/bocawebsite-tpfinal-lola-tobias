@@ -62,6 +62,27 @@ LOGROS = {
     "copa-argentina": ("Boca v atlanta copa argentina 1969.jpg", "Boca y Atlanta en la Copa Argentina de 1969."),
 }
 
+# Journey 2000–2026: año -> (archivo en Commons, epígrafe)
+JOURNEY = {
+    "2000": ("Museo de la Pasión Boquense en enero de 2024 - BugWarp 10.jpg", "La camiseta del 2000, en el Museo de la Pasión Boquense."),
+    "2001": ("Libertadores de Boca exhibida en el Dardo Rocha 02.jpg", "La Copa Libertadores exhibida en La Plata, 2018."),
+    "2003": ("Museo Copas Boca.jpg", "Trofeos en el Museo de la Pasión Boquense."),
+    "2004": ("Museo de la Pasión Boquense en enero de 2024 - BugWarp 07.jpg", "La Copa Sudamericana, con 2004 y 2005 grabados."),
+    "2005": ("Boca Juniors vs. Pumas.jpg", "Boca y Pumas en la final de la Sudamericana, diciembre de 2005."),
+    "2006": ("Boca Juniors v Gimnasia y Esgrima LP, 1 March 2006 (110927714).jpg", "Boca y Gimnasia en la Bombonera, marzo de 2006."),
+    "2007": ("Riquelme 2009.jpg", "Riquelme, el 10 de la Libertadores 2007 (foto de 2009)."),
+    "2008": ("Boca Juniors vs Colo Colo (2580872802).jpg", "Boca y Colo Colo por la Libertadores 2008."),
+    "2011": ("Riquelme boca vs espanyol 2011.jpg", "Riquelme en Barcelona, 2011."),
+    "2012": ("Boca-Juniors-vs-Lanús-41 (21709236966).jpg", "Boca y Lanús en la Bombonera, marzo de 2012."),
+    "2015": ("Boca hinchada bombonera.jpg", "La hinchada detrás del alambrado, abril de 2015."),
+    "2018": ("Libertadores de Boca exhibida en el Dardo Rocha 01.jpg", "La Libertadores, con los años de Boca grabados, 2018."),
+    "2020": ("Bombonera (4391140500).jpg", "La Bombonera llena (foto de 2009)."),
+    "2022": ("Hinchada de Boca desplegando sus telones.JPG", "Los telones de la hinchada (foto de 2009)."),
+    "2023": ("PALMEIRAS X BOCA JUNIORS - COPA LIBERTADORES 2023 (53286672023) (cropped).jpg", "Advíncula en la semifinal de la Libertadores 2023, en San Pablo."),
+    "2025": ("La Bombonera, semifinal 2014.jpg", "La Bombonera de noche (foto de 2014)."),
+    "2026": ('Vista aérea del Estadio Alberto J. Armando "La Bombonera" 08.jpg', "La Bombonera desde el aire, 2025."),
+}
+
 clean = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", html.unescape(s or ""))).strip()
 
 
@@ -115,6 +136,7 @@ def download(photos: dict, out_img: Path, out_json: Path, folder: str) -> int:
 def main() -> None:
     download(PHOTOS, OUT_IMG, OUT_JSON, "historia")
     download(LOGROS, ROOT / "public" / "logros", ROOT / "src" / "data" / "logros-fotos.json", "logros")
+    download(JOURNEY, ROOT / "public" / "journey", ROOT / "src" / "data" / "journey-fotos.json", "journey")
 
 
 if __name__ == "__main__":
