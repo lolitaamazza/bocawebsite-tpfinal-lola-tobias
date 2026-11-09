@@ -227,7 +227,7 @@ export function HistoriaSection() {
               desde 1905, cada una con una foto real de su época.
             </p>
             <p className="eyebrow mt-12 flex items-center gap-3 text-claro/50">
-              Seguí bajando <span className="animate-bounce">↓</span>
+              Seguí bajando <span className="animate-nudge inline-block">↓</span>
             </p>
           </div>
 

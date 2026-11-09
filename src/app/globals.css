@@ -69,3 +69,24 @@
     display: none;
   }
 }
+
+/* Flecha que invita a seguir: baja y se desvanece con desaceleración suave (sin rebote) */
+@keyframes nudge-down {
+  0% {
+    transform: translateY(-3px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(7px);
+    opacity: 0;
+  }
+}
+@utility animate-nudge {
+  animation: nudge-down 1.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

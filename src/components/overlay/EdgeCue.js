@@ -32,7 +32,7 @@ export function EdgeCue() {
     >
       <span className="eyebrow text-oro">Seguí bajando</span>
       <span className="font-serif text-2xl text-claro italic">Historia en la piel</span>
-      <span className="animate-bounce text-oro" aria-hidden="true">
+      <span className="animate-nudge inline-block text-oro" aria-hidden="true">
         ↓
       </span>
     </button>
