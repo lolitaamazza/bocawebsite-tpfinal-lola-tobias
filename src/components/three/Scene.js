@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { room } from '../../config/site'
 import { squad } from '../../data'
-import { useVestuario } from '../../store/vestuario'
+import { VIEW_COOLDOWN, useVestuario } from '../../store/vestuario'
 import { createKnitNormal } from '../../three/textures/knit'
 import { buildProps, buildRoom } from '../../three/room'
 import { RailRig, clampDt } from '../../three/RailRig'
@@ -80,7 +80,12 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
     })
     // Igual que el original: saltear = recorrer lo que falta a 2.2 "intros por segundo"
     rig.onSkipIntro = () => intro.timeScale(Math.max(intro.timeScale(), 2.2 * INTRO_SECONDS))
-    if (bindStore) rig.onReachEnd = () => useVestuario.getState().setView('historia')
+    if (bindStore)
+      rig.onReachEnd = () => {
+        const s = useVestuario.getState()
+        // Recién vuelto de la Historia: la inercia del gesto no tiene que mandarte de nuevo
+        if (performance.now() - s.viewChangedAt > VIEW_COOLDOWN) s.setView('historia')
+      }
     onRig?.(rig)
 
     // Estado → riel (solo el vestuario público)

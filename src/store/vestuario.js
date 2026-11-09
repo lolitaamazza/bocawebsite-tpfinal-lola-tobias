@@ -1,5 +1,8 @@
 import { create } from 'zustand'
 import { site } from '../config/site'
+/** ms después de cambiar de vista en los que se ignoran los gestos de borde (inercia del trackpad) */
+export const VIEW_COOLDOWN = 1200
+
 let toastTimer = 0
 /** Estado de la UI. La escena 3D lo lee con getState() por frame, sin re-renders. */
 export const useVestuario = create((set) => ({
@@ -17,8 +20,10 @@ export const useVestuario = create((set) => ({
   view: 'vestuario',
   /** El canvas deja de renderizar mientras la Historia lo tapa */
   stagePaused: false,
+  /** Cuándo cambió la vista: se ignoran gestos de borde por un momento (inercia del trackpad) */
+  viewChangedAt: 0,
   setPhase: (phase) => set({ phase }),
-  setView: (view) => set((s) => (s.view === view ? s : { view, selected: view === 'historia' ? null : s.selected })),
+  setView: (view) => set((s) => (s.view === view ? s : { view, viewChangedAt: performance.now(), selected: view === 'historia' ? null : s.selected })),
   setProgress: (progress) => set({ progress }),
   setFilter: (filter) => set({ filter }),
   setHover: (hover) => set({ hover }),
