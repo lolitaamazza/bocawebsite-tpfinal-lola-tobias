@@ -23,6 +23,7 @@ Recorrés la percha del vestuario: una camiseta titular por jugador, con su fich
 
 **Públicas**
 - `/` Vestuario 3D: 30 remeras agrupadas por línea, arrastre con inercia, hover con epígrafe, filtros, buscador (`/`), teclado (← → Enter Esc), sonido ambiente sintetizado.
+- `/cronologia` Diez camisetas históricas de Boca en una línea de tiempo, con recreaciones 3D de frente y espalda, enlaces por año y fotos de archivo si WebGL no está disponible.
 - `/dorsal/[dorsal]` Ficha del jugador con la remera en primer plano (se gira arrastrando), retrato, estadísticas y datos. Metadata propia por jugador.
 - `/personaliza` Personalizador: nombre, número y talle estampados en vivo; **Guardar en Mis remeras** (pide ingresar si no hay sesión y vuelve con el diseño).
 
@@ -186,3 +187,8 @@ scripts/                datos de Transfermarkt, seed, smoke, drift, clave de ser
 **Consentimiento.** Usamos Claude Code (Anthropic) como asistente de programación en este proyecto: análisis del sitio de referencia, scripts de datos, textura procedural de la remera, motor del riel 3D, migración de Vite a Next.js, autenticación, ABM, tests y esta documentación. Todo el código pasó por nuestra revisión y podemos explicarlo en la defensa.
 
 **Reflexión.** _(Para completar por Lola y Tobías antes de la entrega: qué aportó la IA, qué hubo que corregir y qué aprendieron.)_
+
+
+## Verificar la cronología en Chrome
+
+Con `npm run dev` en marcha, abrí Chrome con un perfil temporal, `--remote-debugging-port=9229` y, para ejecución sin GPU, `--headless --enable-unsafe-swiftshader --use-angle=swiftshader`. Ejecutá `node scripts/eval-cronologia.mjs`. La evaluación pasa si las diez piezas se pueden seleccionar, el historial y el giro funcionan, la página cabe en 390 px y la foto de archivo se carga al perder WebGL. Podés definir `CRONOLOGIA_URL` o `CHROME_DEVTOOLS_URL` para usar otros puertos.

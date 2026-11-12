@@ -41,13 +41,13 @@ function resample(pts, step) {
 }
 
 /** Contorno de una cara en metros: tramos con su tipo. La espalda cambia el escote. */
-export function faceOutline(side) {
-  return OUTLINE.map((seg, i) => {
-    const neck = i === OUTLINE.length - 1
+export function faceOutline(side, outline = OUTLINE) {
+  return outline.map((seg, i) => {
+    const neck = i === outline.length - 1
     if (side === 'back' && neck) {
       // escote de espalda: se arma en su plantilla y se lleva a metros, uniendo con los hombros
-      const first = toWorld('front', OUTLINE[OUTLINE.length - 1].pts[0])
-      const last = toWorld('front', OUTLINE[0].pts[0])
+      const first = toWorld('front', outline.at(-1).pts[0])
+      const last = toWorld('front', outline[0].pts[0])
       const mid = BACK_NECK.map((p) => toWorld('back', p))
       return { kind: 'open', pts: [first, ...mid, last] }
     }
@@ -92,8 +92,8 @@ const folds = (x, y) => {
 }
 
 /** Arma una cara: 'front' mira a −Z, 'back' a +Z */
-export function buildFace(side) {
-  const outline = faceOutline(side)
+export function buildFace(side, silhouette) {
+  const outline = faceOutline(side, silhouette)
   const ring = resample(
     outline.flatMap((s) => s.pts.slice(0, -1).concat([s.pts[s.pts.length - 1]])).filter((p, i, a) => i === 0 || p[0] !== a[i - 1][0] || p[1] !== a[i - 1][1]),
     EDGE_STEP,
@@ -156,9 +156,9 @@ export function buildFace(side) {
 }
 
 /** Las dos caras en un solo juego de arrays */
-export function buildShirtArrays() {
-  const front = buildFace('front')
-  const back = buildFace('back')
+export function buildShirtArrays(silhouette) {
+  const front = buildFace('front', silhouette)
+  const back = buildFace('back', silhouette)
   const offset = front.position.length / 3
   const index = new Uint32Array(front.index.length + back.index.length)
   index.set(front.index)

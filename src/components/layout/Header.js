@@ -61,6 +61,12 @@ export function Header({ search, filters, account, hideFiltersOnMobile, onCustom
           className={`pointer-events-auto scrollbar-none col-span-3 -mx-4 flex gap-2 overflow-x-auto px-4 md:col-span-1 md:mx-0 md:flex-wrap md:justify-end md:gap-1.5 md:overflow-visible md:px-0 ${hideFiltersOnMobile ? 'max-md:portrait:hidden' : ''}`}
         >
           <Link
+            href="/cronologia"
+            className="eyebrow inline-flex shrink-0 items-center rounded-full border border-oro/45 px-3 tracking-[0.08em] text-oro hover:border-oro focus-visible:outline-2 focus-visible:outline-oro"
+          >
+            Cronología
+          </Link>
+          <Link
             href="/museo"
             className="eyebrow inline-flex shrink-0 items-center rounded-full border border-oro/45 px-3 tracking-[0.08em] text-oro hover:border-oro focus-visible:outline-2 focus-visible:outline-oro"
           >

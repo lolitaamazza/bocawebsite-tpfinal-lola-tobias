@@ -7,8 +7,8 @@ import { buildShirtArrays } from './shirtGeometry'
  * convenciones: metros, origen donde el gancho apoya en el riel, la espalda a +Z.
  */
 
-export function createShirtGeometry() {
-  const a = buildShirtArrays()
+export function createShirtGeometry(silhouette) {
+  const a = buildShirtArrays(silhouette)
   const g = new THREE.BufferGeometry()
   g.setAttribute('position', new THREE.BufferAttribute(a.position, 3))
   g.setAttribute('uv', new THREE.BufferAttribute(a.uv, 2))
