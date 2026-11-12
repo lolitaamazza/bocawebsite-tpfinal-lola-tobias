@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { LogoutButton } from '@/components/account/LogoutButton'
 import { NavLink } from '@/components/account/NavLink'
+import { SiteMenu } from '@/components/layout/SiteMenu'
 import { site } from '@/config/site'
 import { requireUser } from '@/lib/auth'
 
@@ -14,6 +15,7 @@ export default async function CuentaLayout({ children }) {
     <div className="grain relative min-h-dvh">
       <header className="sticky top-0 z-30 border-b border-white/10 bg-fondo/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 md:px-8">
+          <SiteMenu />
           <Link href="/" className="flex items-center gap-2.5" aria-label="Volver al vestuario">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={site.crest.src} alt="" width={842} height={1000} className="h-9 w-auto" />

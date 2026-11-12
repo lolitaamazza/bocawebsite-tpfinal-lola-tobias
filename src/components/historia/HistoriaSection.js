@@ -11,6 +11,7 @@ import { createEdgePush, stepEdgePush } from '@/engine/rail'
 import { VIEW_COOLDOWN, useVestuario } from '@/store/vestuario'
 import { Panel } from './Panel'
 import { QuickLinks } from './QuickLinks'
+import { SiteMenu } from '@/components/layout/SiteMenu'
 import { Vitrina } from './Vitrina'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
@@ -325,13 +326,16 @@ export function HistoriaSection() {
         <div ref={content}>
           {/* barra fija: volver, nombre de la sección y avance del recorrido */}
           <header className="pointer-events-none sticky top-0 z-20 flex items-center justify-between gap-4 bg-gradient-to-b from-[#05080f] via-[#05080f]/80 to-transparent px-[clamp(1.25rem,3vw,2.5rem)] pt-4 pb-8">
-            <button
-              type="button"
-              onClick={() => backTo()}
-              className="eyebrow pointer-events-auto flex items-center gap-2 text-claro/70 hover:text-claro"
-            >
-              <span aria-hidden="true">↑</span> Vestuario
-            </button>
+            <div className="flex items-center gap-3">
+              <SiteMenu />
+              <button
+                type="button"
+                onClick={() => backTo()}
+                className="eyebrow pointer-events-auto flex items-center gap-2 text-claro/70 hover:text-claro"
+              >
+                <span aria-hidden="true">↑</span> Vestuario
+              </button>
+            </div>
             <p className="eyebrow hidden text-oro sm:block">Historia en la piel · 1905 — {site.season}</p>
             <p className="eyebrow pointer-events-auto text-claro/70" aria-live="off">
               <span ref={counter}>01</span> / {String(TOTAL).padStart(2, '0')}

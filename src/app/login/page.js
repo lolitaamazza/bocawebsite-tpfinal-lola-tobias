@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { LoginForm } from '@/components/account/LoginForm'
+import { SiteMenu } from '@/components/layout/SiteMenu'
 import { site } from '@/config/site'
 import { getSessionUser } from '@/lib/firebase/session'
 
@@ -16,6 +17,7 @@ export default async function LoginPage({ searchParams }) {
   if (await getSessionUser()) redirect(typeof next === 'string' && next.startsWith('/') && !next.startsWith('//') ? next : '/mis-remeras')
   return (
     <main className="grain relative grid min-h-dvh place-items-center bg-[radial-gradient(90%_70%_at_50%_0%,#0d1c47_0%,transparent_70%)] px-4 py-10">
+      <SiteMenu className="absolute! top-4 left-4" />
       <div className="flex w-full flex-col items-center">
         <Link href="/" className="mb-8 flex items-center gap-3" aria-label="Volver al vestuario">
           {/* eslint-disable-next-line @next/next/no-img-element */}

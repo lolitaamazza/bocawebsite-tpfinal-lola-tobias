@@ -1,53 +1,14 @@
 import assert from 'node:assert/strict'
 import { writeFile } from 'node:fs/promises'
 import { setTimeout as delay } from 'node:timers/promises'
+import { openChromePage } from './browser-session.mjs'
 
 const site = process.env.CRONOLOGIA_URL ?? 'http://127.0.0.1:4950'
-const devtools = process.env.CHROME_DEVTOOLS_URL ?? 'http://127.0.0.1:9229'
-const page = await fetch(`${devtools}/json/new?about:blank`, { method: 'PUT' }).then((r) => r.json())
-const ws = new WebSocket(page.webSocketDebuggerUrl)
-await new Promise((resolve, reject) => {
-  ws.addEventListener('open', resolve, { once: true })
-  ws.addEventListener('error', reject, { once: true })
-})
-let nextId = 0
-const pending = new Map()
-const errors = []
-ws.addEventListener('message', ({ data }) => {
-  const message = JSON.parse(data)
-  if (message.method === 'Runtime.exceptionThrown') errors.push(message.params.exceptionDetails.text)
-  const request = pending.get(message.id)
-  if (!request) return
-  pending.delete(message.id)
-  if (message.error) request.reject(new Error(message.error.message))
-  else request.resolve(message.result)
-})
+const { send, evaluate, until, errors, close } = await openChromePage()
 
-function send(method, params = {}) {
-  const id = ++nextId
-  return new Promise((resolve, reject) => {
-    pending.set(id, { resolve, reject })
-    ws.send(JSON.stringify({ id, method, params }))
-  })
-}
-
-async function evaluate(expression) {
-  const result = await send('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true })
-  if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description ?? result.exceptionDetails.text)
-  return result.result.value
-}
-
-async function until(expression, timeout = 90000) {
-  const deadline = Date.now() + timeout
-  while (Date.now() < deadline) {
-    if (await evaluate(`Boolean(${expression})`)) return
-    await delay(150)
-  }
-  throw new Error(`No se cumplió: ${expression}`)
-}
-
-const timeline = 'document.querySelectorAll("nav ol button")'
-const currentYear = 'document.querySelector("nav [aria-current]")?.textContent.trim()'
+const timelineNav = `document.querySelector('nav[aria-label="Línea de tiempo de camisetas"]')`
+const timeline = `${timelineNav}.querySelectorAll('button')`
+const currentYear = `${timelineNav}.querySelector('[aria-current]')?.textContent.trim()`
 
 async function drag(x, y, toX) {
   await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y })
@@ -125,6 +86,5 @@ try {
   assert.deepEqual(errors, [])
   console.log('Cronología: arrastre del riel, 10/10 fichas, giro, historial, enlace directo, móvil y respaldo sin WebGL.')
 } finally {
-  ws.close()
-  await fetch(`${devtools}/json/close/${page.id}`).catch(() => {})
+  await close()
 }

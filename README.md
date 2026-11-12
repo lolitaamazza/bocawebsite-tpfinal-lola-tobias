@@ -34,6 +34,8 @@ Recorrés la percha del vestuario: una camiseta titular por jugador, con su fich
 
 ## Mapa de navegación
 
+El botón **Menú** abre la navegación principal en las cabeceras. Reúne el vestuario, la cronología, el museo, Journey, el personalizador y las secciones de cuenta. La página actual queda marcada. Se puede recorrer con Tab y cerrar con Escape o un clic fuera del panel.
+
 ```mermaid
 flowchart LR
   V["/ Vestuario 3D"] --> D["/dorsal/[dorsal] Ficha"]
@@ -192,3 +194,5 @@ scripts/                datos de Transfermarkt, seed, smoke, drift, clave de ser
 ## Verificar la cronología en Chrome
 
 Con `npm run dev` en marcha, abrí Chrome con un perfil temporal, `--remote-debugging-port=9229` y, para ejecución sin GPU, `--headless --enable-unsafe-swiftshader --use-angle=swiftshader`. Ejecutá `node scripts/eval-cronologia.mjs`. La evaluación recorre el riel por arrastre, abre las diez fichas, verifica el giro y los enlaces por año, prueba un ancho de 390 px y carga la foto de archivo al perder WebGL. Los detalles de los diseños se toman del archivo oficial de Boca y de la ficha adidas JJ4286 para el modelo de 2025. Los recortes de estampados reutilizan las fotos de public/museo en tiempo de carga. Podés definir `CRONOLOGIA_URL` o `CHROME_DEVTOOLS_URL` para usar otros puertos.
+
+Para probar el menú con la misma sesión de Chrome, ejecutá `node scripts/eval-navbar.mjs`. Verifica teclado, cierre, navegación pública, entrada al área privada y el ancho de 320 px. Podés definir `NAVBAR_URL` para apuntar a otro puerto.

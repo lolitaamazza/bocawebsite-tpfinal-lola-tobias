@@ -8,6 +8,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { site } from '@/config/site'
+import { SiteMenu } from '@/components/layout/SiteMenu'
 import { journey, journeyYears } from '@/data/journey'
 import { hitoIndexForYear, rollOffsets } from '@/engine/journey'
 
@@ -108,9 +109,7 @@ export function Journey() {
           className="flex items-center justify-between gap-4 border-b border-fondo/70 px-3 py-2 font-mono text-[10px] tracking-[0.14em] uppercase md:px-4"
           aria-label="Secciones"
         >
-          <Link href="/" className="hover:text-azul">
-            Vestuario
-          </Link>
+          <SiteMenu />
           <Link href="/museo" className="hidden hover:text-azul sm:inline">
             Museo
           </Link>
@@ -127,7 +126,7 @@ export function Journey() {
       </header>
 
       {/* columna de años */}
-      <nav aria-label="Años" className="fixed top-14 bottom-6 left-3 z-30 hidden flex-col justify-between md:flex">
+      <nav aria-label="Años" className="fixed top-[4.25rem] bottom-6 left-3 z-30 hidden flex-col justify-between md:flex">
         {journeyYears.map((y) => {
           const has = conHito.has(y)
           const isActive = y === activeYear

@@ -132,7 +132,7 @@ export function VestuarioContainer() {
       {/* viñeta */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_45%,transparent_55%,rgba(2,4,10,0.82)_100%)]" />
 
-      <HeaderContainer openSelection={openSelection} onCustomize={() => customize()} />
+      {!error && <HeaderContainer openSelection={openSelection} onCustomize={() => customize()} />}
       <div data-reveal className="opacity-0">
         <GroupLabels />
       </div>

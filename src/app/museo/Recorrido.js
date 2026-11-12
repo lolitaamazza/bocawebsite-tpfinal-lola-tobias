@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { SiteMenu } from '@/components/layout/SiteMenu'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -158,7 +158,7 @@ export function Recorrido() {
     <section ref={root} className={styles.recorrido} style={{ '--duration': duration }} aria-label="Editorial de camisetas">
       <div ref={stage} className={styles.stage}>
         <header className={styles.masthead}>
-          <Link href="/" className={styles.returnLink}>← Vestuario</Link>
+          <SiteMenu />
           <span>Archivo de indumentaria / CABJ</span>
           <a href="#creditos" className={styles.creditLink}>Créditos ↘</a>
         </header>
