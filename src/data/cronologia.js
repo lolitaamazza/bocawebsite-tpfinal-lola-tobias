@@ -1,20 +1,20 @@
 import { piezas } from '@/app/museo/piezas'
 
-const azul = '#183966'
-const oro = '#edbc36'
+const gold = '#efbf3a'
 
-// Rasgos reconocibles del frente. Las fotos del museo son la referencia de época.
+// Cada diseño se coteja con la foto de su ficha. Los estampados del archivo se
+// trasladan al atlas UV conservando su forma, en lugar de reescribirlos.
 const diseños = {
-  1905: { body: '#eee9de', accent: '#22242b', pattern: 'stripes', longSleeves: true, stripe: [55, 9] },
-  1908: { body: azul, accent: oro, pattern: 'diagonal', longSleeves: true },
-  1916: { body: azul, accent: oro, pattern: 'band', collar: 'laces' },
-  1940: { body: '#183355', accent: '#e3ae36', pattern: 'band', collar: 'button', longSleeves: true },
-  1980: { body: '#254783', accent: oro, pattern: 'band', shoulders: true },
-  1996: { body: '#152c63', accent: oro, pattern: 'band', edging: '#fff4dc', sponsor: 'Quilmes', crest: 'shield' },
-  2000: { body: '#163870', accent: '#f4be22', pattern: 'hoops', sponsor: 'Quilmes', crest: 'shield' },
-  2007: { body: '#f2efe6', accent: '#1b2945', pattern: 'stripes', stripe: [25, 6], sponsor: 'Megatone', crest: 'shield' },
-  2020: { body: '#172954', accent: '#f8c62f', pattern: 'band', shoulders: true, sponsor: 'QATAR AIRWAYS', crest: 'shield' },
-  2025: { body: '#121d3c', accent: '#d6ad53', pattern: 'band', shoulders: true, sponsor: 'Betsson', crest: 'anniversary' },
+  1905: { body: '#ece9dd', accent: '#24232a', pattern: 'stripes', longSleeves: true, stripe: [54, 7], collar: 'button' },
+  1908: { body: '#15354e', accent: '#e9bc39', pattern: 'diagonal', longSleeves: true, collar: 'button' },
+  1916: { body: '#18517a', accent: '#e9b638', pattern: 'band', band: [18, 63], collar: 'laces' },
+  1940: { body: '#142849', accent: '#e4ae31', pattern: 'band', band: [-46, 57], collar: 'button', longSleeves: true },
+  1980: { body: '#174287', accent: gold, pattern: 'band', band: [1, 86], shoulders: 'full', collar: 'gold', cuff: true },
+  1996: { body: '#18396e', accent: gold, pattern: 'band', band: [0, 85], edging: '#fff4dc', cuff: true, collar: 'gold' },
+  2000: { body: '#121f43', accent: '#edbb2c', pattern: 'hoops', collar: 'gold' },
+  2007: { body: '#eceae1', accent: '#1d2532', pattern: 'stripes', stripe: [13, 4], collar: 'dark', cuff: true, panel: true },
+  2020: { body: '#152f72', accent: '#f8c62f', pattern: 'band', band: [9, 90], shoulders: 'short', cuff: true },
+  2025: { body: '#141e3a', accent: '#d6aa4b', pattern: 'band', band: [22, 73], shoulders: 'short', collar: 'gold' },
 }
 
 export const camisetas = piezas.flatMap((pieza) => {
@@ -22,7 +22,8 @@ export const camisetas = piezas.flatMap((pieza) => {
   return diseño ? [{ ...pieza, diseño }] : []
 })
 
-export function camisetaIndex(hash) {
-  const index = camisetas.findIndex(({ id }) => hash === `#camiseta-${id}`)
-  return index < 0 ? 0 : index
+export const perchasHistoricas = camisetas.map(({ id }) => ({ id, tag: id, dorsal: Number(id), pos: 'historia' }))
+
+export function camisetaId(hash) {
+  return camisetas.find(({ id }) => hash === `#camiseta-${id}`)?.id ?? null
 }

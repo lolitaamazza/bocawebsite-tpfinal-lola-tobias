@@ -48,6 +48,14 @@ describe('railBounds', () => {
     expect(b.min).toBeCloseTo(s[0].restX - EDGE_MARGIN + 1)
     expect(b.max).toBeCloseTo(s[29].restX + EDGE_MARGIN - 1)
   })
+  it('centra ambas puntas del riel histórico incluso en pantallas anchas', () => {
+    const s = slots(...Array.from({ length: 10 }, () => 'historia'))
+    layoutRail(s, 0.32)
+    const bounds = railBounds(s, 3, 3)
+    expect(bounds.min).toBeCloseTo(s[0].restX)
+    expect(bounds.max).toBeCloseTo(s.at(-1).restX)
+    expect(s[1].restX - s[0].restX).toBeCloseTo(0.32)
+  })
   it('sin scroll cuando todo entra en pantalla', () => {
     const s = slots('ARQ', 'ARQ')
     layoutRail(s)

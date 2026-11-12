@@ -37,9 +37,10 @@ export class Jersey {
     this.player = player
     this.shared = shared
     const { assets } = shared
+    this.makeTexture = assets.makeTexture ?? jerseyTexture
     this.phase = (index * 2.399) % (Math.PI * 2)
     this.slot = { pos: player.pos, active: true, restX: 0 }
-    this.lowRes = jerseyTexture(assets, player, shared.lowK, shared.anisotropy)
+    this.lowRes = this.makeTexture(assets, player, shared.lowK, shared.anisotropy)
     const { material, depth, uniforms } = createClothMaterial({
       map: this.lowRes,
       normalMap: shared.knit,
@@ -49,7 +50,7 @@ export class Jersey {
     })
     uniforms.uAmp.value = reduced ? 0 : 0.009
     this.cloth = uniforms
-    this.mesh = new THREE.Mesh(assets.shirt, material)
+    this.mesh = new THREE.Mesh(assets.geometryFor?.(player) ?? assets.shirt, material)
     this.mesh.customDepthMaterial = depth
     this.mesh.castShadow = this.mesh.receiveShadow = true
     const hanger = new THREE.Mesh(assets.hanger, shared.hangerMaterial)
@@ -74,7 +75,7 @@ export class Jersey {
   sharpen(k) {
     if (this.hiK >= k) return
     this.hiRes?.dispose()
-    this.hiRes = jerseyTexture(this.shared.assets, this.player, k, this.shared.anisotropy)
+    this.hiRes = this.makeTexture(this.shared.assets, this.player, k, this.shared.anisotropy)
     this.hiK = k
     this.mesh.material.map = this.hiRes
   }
@@ -90,11 +91,11 @@ export class Jersey {
   restamp(shirt, estampado) {
     this.player = { ...this.player, shirt, estampado }
     this.lowRes.dispose()
-    this.lowRes = jerseyTexture(this.shared.assets, this.player, this.shared.lowK, this.shared.anisotropy)
+    this.lowRes = this.makeTexture(this.shared.assets, this.player, this.shared.lowK, this.shared.anisotropy)
     if (this.hiRes) {
       const k = this.hiK
       this.hiRes.dispose()
-      this.hiRes = jerseyTexture(this.shared.assets, this.player, k, this.shared.anisotropy)
+      this.hiRes = this.makeTexture(this.shared.assets, this.player, k, this.shared.anisotropy)
     }
     this.mesh.material.map = this.hiRes ?? this.lowRes
   }
@@ -102,5 +103,6 @@ export class Jersey {
     this.lowRes.dispose()
     this.hiRes?.dispose()
     this.mesh.material.dispose()
+    this.mesh.customDepthMaterial.dispose()
   }
 }

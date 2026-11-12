@@ -19,8 +19,8 @@ export function createTag(player) {
   ctx.beginPath()
   ctx.arc(80, 80, 66, 0, Math.PI * 2)
   ctx.stroke()
-  const label = player.capitan ? 'C' : String(player.dorsal)
-  ctx.font = `${label.length > 1 ? 78 : 92}px "${fonts.tag}"`
+  const label = player.tag ?? (player.capitan ? 'C' : String(player.dorsal))
+  ctx.font = `${label.length > 2 ? 49 : label.length > 1 ? 78 : 92}px "${fonts.tag}"`
   ctx.textAlign = 'center'
   ctx.fillStyle = 'rgba(255,240,200,0.5)'
   ctx.fillText(label, 80, 113)

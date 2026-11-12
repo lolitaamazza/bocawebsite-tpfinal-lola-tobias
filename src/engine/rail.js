@@ -15,14 +15,14 @@ export const PICK_RADIUS = 0.17
  * Reparte las perchas activas, centradas en 0, con un hueco entre líneas.
  * Muta `restX` de los slots activos y devuelve el rango de cada línea.
  */
-export function layoutRail(slots) {
+export function layoutRail(slots, gap = HANGER_GAP) {
   const active = slots.filter((s) => s.active)
   let x = 0
   let prev = null
   for (const s of active) {
     if (prev && s.pos !== prev) x += GROUP_GAP
     s.restX = x
-    x += HANGER_GAP
+    x += gap
     prev = s.pos
   }
   const centre = active.length ? (active[0].restX + active[active.length - 1].restX) / 2 : 0
@@ -39,11 +39,11 @@ export function layoutRail(slots) {
  * Límites del scroll del riel. `viewHalf` es medio ancho visible (en metros) a la
  * distancia del riel. Si todo entra en pantalla no hay scroll.
  */
-export function railBounds(slots, viewHalf) {
+export function railBounds(slots, viewHalf, margin = EDGE_MARGIN) {
   const active = slots.filter((s) => s.active)
   if (!active.length) return { min: 0, max: 0 }
-  const min = active[0].restX - EDGE_MARGIN + viewHalf
-  const max = active[active.length - 1].restX + EDGE_MARGIN - viewHalf
+  const min = active[0].restX - margin + viewHalf
+  const max = active[active.length - 1].restX + margin - viewHalf
   return min < max ? { min, max } : { min: 0, max: 0 }
 }
 /** Índice de la percha activa más cercana a `x` (en coordenadas del riel), o -1 */

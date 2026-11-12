@@ -41,6 +41,7 @@ export class RailRig {
   yawVel = 0
   stageSince = 0
   time = 0
+  centre = null
   hover = null
   selected = null
   dragging = false
@@ -61,9 +62,11 @@ export class RailRig {
     this.opts = opts
     this.cb = cb
     players.forEach((p, i) => this.add(new Jersey(p, i, shared, true, opts.reduced)))
-    this.custom = this.add(new Jersey(customPlayer, players.length, shared, false, opts.reduced))
-    this.custom.slot.active = false
-    this.custom.scale = 1e-4
+    if (customPlayer) {
+      this.custom = this.add(new Jersey(customPlayer, players.length, shared, false, opts.reduced))
+      this.custom.slot.active = false
+      this.custom.scale = 1e-4
+    }
     this.layout()
     for (const it of this.items) {
       it.x = it.slot.restX
@@ -106,6 +109,18 @@ export class RailRig {
     }
     this.canvas.style.cursor = next ? 'grab' : ''
   }
+  setStageRect(rect) {
+    this.stageRect = rect
+  }
+  /** Centra una percha y la resalta, sin abrir la ficha. */
+  focus(id) {
+    const target = this.items.find((it) => it.slot.active && it.player.id === id)
+    if (!target) return
+    this.kbd = true
+    this.scrollTarget = scrollTo(target.slot, this.bounds)
+    this.scrollVel = 0
+    this.setHover(target)
+  }
   /** Flechas: siguiente/anterior. Con ficha abierta cambia de jugador; si no, mueve el hover. */
   step(dir) {
     const from = this.selected ?? this.hover
@@ -123,7 +138,7 @@ export class RailRig {
     if (this.hover) this.cb.onSelect(this.hover.player.id)
   }
   restampCustom(name, number) {
-    this.custom.restamp(name, number)
+    this.custom?.restamp(name, number)
   }
   dispose() {
     this.unbind()
@@ -132,7 +147,7 @@ export class RailRig {
   }
   // ───────────────────────── geometría ─────────────────────────
   layout() {
-    this.groups = layoutRail(this.items.map((it) => it.slot))
+    this.groups = layoutRail(this.items.map((it) => it.slot), this.opts.gap)
     this.updateBounds()
   }
   viewHalf(distance = CAMERA_HOME.z) {
@@ -142,6 +157,7 @@ export class RailRig {
     this.bounds = railBounds(
       this.items.map((it) => it.slot),
       this.viewHalf(),
+      this.opts.centreEnds ? this.viewHalf() : undefined,
     )
   }
   /** Ajusta el FOV para que en vertical angosto entre al menos ±0.6 m de riel */
@@ -340,7 +356,7 @@ export class RailRig {
     this.camera.updateMatrixWorld()
     // Hover: puntero en escritorio, la del centro en táctil
     if (!this.ready) this.setHover(null)
-    else if (!this.selected && !this.dragging && p.inside && !p.touch) this.setHover(this.pick())
+    else if (!this.selected && !this.dragging && p.inside && !p.touch && !this.kbd) this.setHover(this.pick())
     else if (this.opts.touch && !this.selected && !this.kbd) {
       const i = centredSlot(
         this.items.map((it) => it.slot),
@@ -355,6 +371,14 @@ export class RailRig {
       this.userYaw += this.yawVel * dt
       this.yawVel *= Math.exp(-2.6 * dt)
     }
+    if (this.cb.onCentre && this.ready && !this.selected) {
+      const i = centredSlot(this.items.map((it) => it.slot), this.scroll)
+      const centre = this.items[i]?.player.id ?? null
+      if (centre !== this.centre) {
+        this.centre = centre
+        this.cb.onCentre(centre)
+      }
+    }
     const pose = stagePose({
       rect: this.stageRect,
       tanHalf: this.tanHalf,
@@ -366,6 +390,7 @@ export class RailRig {
       shirtDrop: -this.assets.size.bottom,
       railY: RAIL_Y,
     })
+    const faceYaw = this.opts.showFront ? Math.PI : 0
     const showcase = reduced ? 0 : Math.sin((t - this.stageSince) * 0.7) * 0.16
     const active = this.items.filter((it) => it.slot.active)
     const hoverAt = this.hover && !this.selected ? active.indexOf(this.hover) : -1
@@ -373,7 +398,7 @@ export class RailRig {
       let tx = it.slot.restX
       let ty = 0
       let tz = 0
-      let yaw = REST_YAW
+      let yaw = this.opts.showFront ? Math.PI - REST_YAW : REST_YAW
       let scale = it.slot.active ? 1 : 1e-4
       let speed = 7
       if (it === this.selected) {
@@ -381,13 +406,13 @@ export class RailRig {
         ty = pose.y
         tz = pose.z
         scale = pose.scale
-        yaw = this.userYaw + showcase
+        yaw = faceYaw + this.userYaw + showcase
         speed = 5.5
       } else if (hoverAt >= 0) {
         const offset = active.indexOf(it) - hoverAt
         if (offset === 0) {
           tz = 0.34
-          yaw = 0
+          yaw = faceYaw
           scale = 1.07
           speed = 9
         } else if (it.slot.active) tx += neighbourPush(offset)

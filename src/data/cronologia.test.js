@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { camisetaIndex, camisetas } from './cronologia'
+import { camisetaId, camisetas, perchasHistoricas } from './cronologia'
+import { archiveMarks, inkAlpha } from '@/components/cronologia/archiveMarks'
 
 describe('Cronología de camisetas', () => {
   it('selecciona diez piezas del archivo, ordenadas y con foto de respaldo', () => {
@@ -17,11 +18,22 @@ describe('Cronología de camisetas', () => {
     }
   })
 
-  it('abre cada enlace directo y vuelve al comienzo con un fragmento desconocido', () => {
-    for (const [index, item] of camisetas.entries()) {
-      expect(camisetaIndex(`#camiseta-${item.id}`)).toBe(index)
+  it('mantiene el orden en el riel y conserva la entrada libre sin un año en la URL', () => {
+    expect(perchasHistoricas.map(({ id }) => id)).toEqual(camisetas.map(({ id }) => id))
+    for (const item of camisetas) {
+      expect(camisetaId(`#camiseta-${item.id}`)).toBe(item.id)
     }
-    expect(camisetaIndex('')).toBe(0)
-    expect(camisetaIndex('#camiseta-2002')).toBe(0)
+    expect(camisetaId('')).toBeNull()
+    expect(camisetaId('#camiseta-2002')).toBeNull()
+  })
+
+  it('separa la tinta de archivo de la tela azul, oro o blanca que la rodea', () => {
+    expect(inkAlpha('gold', 226, 171, 38)).toBe(255)
+    expect(inkAlpha('gold', 20, 45, 95)).toBe(0)
+    expect(inkAlpha('light', 235, 229, 220)).toBe(255)
+    expect(inkAlpha('light', 20, 45, 95)).toBe(0)
+    expect(inkAlpha('dark', 25, 27, 35)).toBe(255)
+    expect(inkAlpha('dark', 219, 168, 34)).toBe(0)
+    expect(Object.keys(archiveMarks)).toEqual(['1980', '1996', '2000', '2007', '2020'])
   })
 })

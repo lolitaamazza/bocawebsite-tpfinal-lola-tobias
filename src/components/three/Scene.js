@@ -12,6 +12,7 @@ import { buildProps, buildRoom } from '../../three/room'
 import { RailRig, clampDt } from '../../three/RailRig'
 
 const INTRO_SECONDS = 3.6
+const DEFAULT_RAIL = {}
 
 /** Remera del personalizador: arranca con el texto de ejemplo del original */
 export const CUSTOM_PLAYER = {
@@ -30,14 +31,14 @@ export const CUSTOM_PLAYER = {
  * hover y clics suben al store. Vestuario personal: recibe las remeras del usuario
  * en `players` y avisa por `onHover`/`onSelect` (sin ficha ni filtros).
  */
-export function Scene({ assets, mobile, onRig, players = squad, bindStore = true, onHover, onSelect }) {
+export function Scene({ assets, mobile, onRig, players = squad, bindStore = true, onHover, onSelect, onCentre, onReady, railOptions = DEFAULT_RAIL }) {
   const { gl, scene, camera } = useThree()
   const rigRef = useRef(null)
   // Los callbacks pueden cambiar en cada render: se leen por ref para no rearmar la escena
-  const callbacks = useRef({ onHover, onSelect })
+  const callbacks = useRef({ onHover, onSelect, onCentre, onReady })
   useEffect(() => {
-    callbacks.current = { onHover, onSelect }
-  }, [onHover, onSelect])
+    callbacks.current = { onHover, onSelect, onCentre, onReady }
+  }, [onHover, onSelect, onCentre, onReady])
 
   useEffect(() => {
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -48,7 +49,7 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
     const store = useVestuario.getState()
     const rig = new RailRig(
       players,
-      CUSTOM_PLAYER,
+      railOptions.withCustom === false ? null : CUSTOM_PLAYER,
       assets,
       {
         assets,
@@ -62,10 +63,10 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
       camera,
       gl.domElement,
       dim,
-      { mobile, touch, reduced, k: { low: mobile ? 0.5 : 0.64, hover: mobile ? 1 : 1.3, stage: mobile ? 1.5 : 2 } },
+      { ...railOptions, mobile, touch, reduced, k: { low: mobile ? 0.5 : 0.64, hover: mobile ? 1 : 1.3, stage: mobile ? 1.5 : 2 } },
       bindStore
         ? { onHover: (id) => useVestuario.getState().setHover(id), onSelect: (id) => useVestuario.getState().select(id) }
-        : { onHover: (id) => callbacks.current.onHover?.(id), onSelect: (id) => callbacks.current.onSelect?.(id) },
+        : { onHover: (id) => callbacks.current.onHover?.(id), onSelect: (id) => callbacks.current.onSelect?.(id), onCentre: onCentre ? (id) => callbacks.current.onCentre?.(id) : undefined },
     )
     scene.add(rig.rail)
     rigRef.current = rig
@@ -76,7 +77,10 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
       p: 1,
       duration: reduced ? 0.01 : bindStore ? INTRO_SECONDS : INTRO_SECONDS * 0.6,
       ease: 'power2.inOut',
-      onComplete: () => bindStore && useVestuario.getState().setPhase('ready'),
+      onComplete: () => {
+        if (bindStore) useVestuario.getState().setPhase('ready')
+        callbacks.current.onReady?.()
+      },
     })
     // Igual que el original: saltear = recorrer lo que falta a 2.2 "intros por segundo"
     rig.onSkipIntro = () => intro.timeScale(Math.max(intro.timeScale(), 2.2 * INTRO_SECONDS))
@@ -110,7 +114,7 @@ export function Scene({ assets, mobile, onRig, players = squad, bindStore = true
       scene.remove(rig.rail, group, props)
       rigRef.current = null
     }
-  }, [assets, camera, gl, scene, mobile, onRig, players, bindStore])
+  }, [assets, camera, gl, scene, mobile, onRig, players, bindStore, railOptions, onCentre])
 
   useFrame((_, delta) => {
     rigRef.current?.tick(clampDt(delta))
