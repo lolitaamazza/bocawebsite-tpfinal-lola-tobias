@@ -41,6 +41,8 @@ const base = [
     title: 'Títulos internacionales',
     years: ['1919', '2008'],
     range: true,
+    // es un total (incluye Libertadores, Intercontinentales y Sudamericanas): la vitrina 3D lo cuenta, no lo apila
+    total: true,
     text: 'Libertadores, Intercontinentales, Sudamericanas, cuatro Recopas, la Supercopa, la Copa de Oro y la Copa Master, entre otros.',
   },
   {
