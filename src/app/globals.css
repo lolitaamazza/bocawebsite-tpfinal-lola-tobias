@@ -37,6 +37,9 @@
   }
 }
 
+/* Perfil del jugador a tres columnas: pantalla ancha y apaisada (si no, versión vertical) */
+@custom-variant wide (@media (min-width: 820px) and (orientation: landscape));
+
 /* ───────── Utilidades propias ───────── */
 
 /* Grano de película sobre todo el vestuario */
