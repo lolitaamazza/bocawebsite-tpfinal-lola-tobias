@@ -156,56 +156,70 @@ export function HistoriaSection() {
         },
       })
       if (!reduced) {
+        // Todo atado al avance horizontal (containerAnimation) y con scrub: se puede ir y volver
+        const along = (trigger, start, end) => ({
+          trigger,
+          scroller,
+          containerAnimation: horizontal,
+          start,
+          end,
+          scrub: true,
+        })
+        // la imagen se desliza adentro de su recorte rasgado
         strip.querySelectorAll('[data-parallax]').forEach((img) => {
           gsap.fromTo(
             img,
-            { xPercent: -9 },
-            {
-              xPercent: 9,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: img.parentElement,
-                scroller,
-                containerAnimation: horizontal,
-                start: 'left right',
-                end: 'right left',
-                scrub: true,
-              },
-            },
+            { xPercent: -8 },
+            { xPercent: 8, ease: 'none', scrollTrigger: along(img.parentElement, 'left right', 'right left') },
           )
         })
-        strip.querySelectorAll('[data-ghost]').forEach((g) => {
+        // collage: cada foto y cada etiqueta derivan a su velocidad y giran un poco
+        strip.querySelectorAll('[data-drift]').forEach((el) => {
+          const s = Number(el.dataset.drift) || 1
+          const spin = Number(el.dataset.spin) || 0
           gsap.fromTo(
-            g,
-            { xPercent: 30 },
+            el,
+            { x: 70 * s, y: -12 * s, rotation: -spin },
             {
-              xPercent: -30,
+              x: -70 * s,
+              y: 12 * s,
+              rotation: spin,
               ease: 'none',
-              scrollTrigger: {
-                trigger: g.parentElement,
-                scroller,
-                containerAnimation: horizontal,
-                start: 'left right',
-                end: 'right left',
-                scrub: true,
-              },
+              scrollTrigger: along(el.closest('article'), 'left right', 'right left'),
             },
           )
         })
+        // el año gigante entra deslizándose
+        strip.querySelectorAll('[data-year]').forEach((y) => {
+          gsap.fromTo(
+            y,
+            { xPercent: 28, opacity: 0 },
+            { xPercent: 0, opacity: 1, ease: 'power2.out', scrollTrigger: along(y, 'left 98%', 'left 62%') },
+          )
+        })
+        // el título se imprime de arriba hacia abajo (el recorte deja aire para tildes)
         strip.querySelectorAll('[data-panel-title]').forEach((t) => {
-          gsap.from(t, {
-            yPercent: 35,
-            opacity: 0,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: t,
-              scroller,
-              containerAnimation: horizontal,
-              start: 'left 92%',
-              end: 'left 60%',
-              scrub: true,
+          gsap.fromTo(
+            t,
+            { clipPath: 'inset(-20% -5% 100% -5%)', yPercent: 30 },
+            {
+              clipPath: 'inset(-20% -5% -20% -5%)',
+              yPercent: 0,
+              ease: 'power2.out',
+              scrollTrigger: along(t, 'left 92%', 'left 58%'),
             },
-          })
+          )
+        })
+        strip.querySelectorAll('[data-copy]').forEach((c) => {
+          gsap.fromTo(
+            c,
+            { y: 18, opacity: 0 },
+            { y: 0, opacity: 1, ease: 'power2.out', scrollTrigger: along(c, 'left 90%', 'left 60%') },
+          )
+        })
+        // las marcas de la línea de tiempo crecen al pasar
+        strip.querySelectorAll('[data-tick]').forEach((t) => {
+          gsap.fromTo(t, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: along(t, 'left 96%', 'left 75%') })
         })
         // Vitrina: líneas de la cuadrícula que se dibujan, tarjetas a distinta velocidad,
         // fotos con paralaje vertical y números que cuentan hasta su valor
@@ -345,50 +359,72 @@ export function HistoriaSection() {
             </span>
           </header>
 
-          {/* apertura */}
-          <div className="relative -mt-16 flex min-h-dvh flex-col justify-center px-[clamp(1.25rem,5vw,5rem)]">
-            <p className="eyebrow overflow-hidden text-oro">
+          {/* apertura: afiche impreso (titular en oro gastado, bajada chica, escudo arriba a la derecha) */}
+          <div className="paper-grunge relative -mt-16 flex min-h-dvh flex-col justify-center overflow-hidden px-[clamp(1.25rem,5vw,5rem)] pt-28 pb-24">
+            <div className="absolute top-[clamp(5rem,12vh,7.5rem)] right-[clamp(1.25rem,5vw,5rem)] flex items-center gap-3">
+              <span className="hidden text-right font-mono text-[9px] leading-tight tracking-[0.2em] text-oro/80 uppercase sm:block">
+                Club Atlético
+                <br />
+                Boca Juniors
+                <br />
+                desde 1905
+              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element -- svg chico, sin optimizar */}
+              <img src={site.crest.src} alt={site.crest.alt} width={842} height={1000} className="h-[clamp(2.4rem,6vh,3.6rem)] w-auto" />
+            </div>
+
+            <p className="eyebrow overflow-hidden text-oro/90">
               <span data-intro-line className="block">
-                Del vestuario al archivo
+                Del vestuario al archivo · 1905 — {site.season}
               </span>
             </p>
-            {/* Cada línea se revela desde abajo: el recorte lleva aire arriba y abajo para no comerse comas ni acentos */}
-            <h2 className="mt-4 font-display text-[clamp(3.4rem,11.5vw,12rem)] leading-[0.9] uppercase">
+            {/* Cada línea se revela desde abajo: el recorte lleva aire arriba y abajo para no comerse acentos */}
+            <h2 className="print-ink mt-4 font-display text-[clamp(3.6rem,12.5vw,13.5rem)] leading-[0.86] text-oro uppercase">
               <span className="-my-[0.08em] block overflow-hidden py-[0.08em]">
                 <span data-intro-line className="block">
-                  Cosida,
+                  Historia en
                 </span>
               </span>
               <span className="-my-[0.08em] block overflow-hidden py-[0.08em]">
-                <span data-intro-line className="flex flex-wrap items-baseline gap-x-[0.18em]">
-                  <span className="font-serif text-[0.6em] leading-none tracking-normal text-oro normal-case italic">nunca</span>
-                  <span>estampada.</span>
+                <span data-intro-line className="block">
+                  la piel
                 </span>
               </span>
             </h2>
-            <p className="mt-8 max-w-[52ch] text-[15px] leading-relaxed text-claro/70 md:text-base">
-              Antes de la franja, de los sponsors y del 3D hubo una camiseta blanca con tiras negras cosidas a mano. Estas son las
-              pieles que vistió Boca desde 1905, cada una con una foto real de su época.
+            <p className="mt-6 max-w-[58ch] text-[clamp(11px,1.15vw,14px)] leading-[1.3] font-bold tracking-[0.04em] text-claro/85 uppercase">
+              Hay hitos enormes, pero cada camiseta cuenta una historia cosida a mano. Desde las tiras negras de 1905 hasta la de{' '}
+              {site.season}, estas son las pieles que vistió Boca, cada una con una foto real de su época.
             </p>
-            <p className="eyebrow mt-12 flex items-center gap-3 text-claro/50">
+            <p className="eyebrow mt-12 flex items-center gap-3 text-claro/60">
               Seguí bajando <span className="animate-nudge inline-block">↓</span>
             </p>
+            {/* filete al pie, como en el afiche */}
+            <span aria-hidden="true" className="absolute inset-x-[clamp(1.25rem,5vw,5rem)] bottom-8 h-px bg-oro/70" />
           </div>
 
-          {/* recorrido horizontal */}
+          {/* recorrido horizontal: un collage sobre papel, con la línea de tiempo al pie */}
           <div ref={pinWrap} className="relative">
             <div className="sticky top-0 h-dvh overflow-hidden">
-              <div ref={track} className="flex h-full w-max items-center will-change-transform">
+              <div ref={track} className="paper-grunge relative flex h-full w-max pl-[6vw] will-change-transform">
+                <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[7%] h-px bg-oro/55" />
                 {historia.map((p, i) => (
-                  <Panel key={p.id} pieza={p} total={TOTAL} variant={i % 3} />
+                  <Panel key={p.id} pieza={p} index={i} total={TOTAL} />
                 ))}
-                <div className="flex h-full w-[60vw] shrink-0 flex-col justify-center px-[6vw]">
-                  <p className="eyebrow text-oro">Fin del recorrido</p>
-                  <p className="mt-3 font-display text-[clamp(2.5rem,6vw,6rem)] leading-[0.9] uppercase">
+                <div className="relative flex h-full w-[min(44rem,92vw)] shrink-0 flex-col justify-center pr-[6vw] pl-[8vw]">
+                  <p className="font-mono text-[10px] font-semibold tracking-[0.2em] text-oro/90 uppercase">Fin del recorrido</p>
+                  <p data-panel-title className="print-ink mt-3 font-display text-[clamp(3rem,7vw,7rem)] leading-[0.88] text-oro uppercase">
                     La próxima
-                    <br />
-                    <span className="font-serif text-oro normal-case italic">la escribís vos.</span>
                   </p>
+                  <p data-year className="font-serif text-[clamp(2.4rem,5.5vw,5.5rem)] leading-[0.9] text-claro italic">
+                    la escribís vos.
+                  </p>
+                  <span aria-hidden="true" data-tick className="absolute bottom-[7%] left-[8vw] h-4 w-px translate-y-1/2 bg-oro" />
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-[calc(7%-1.6rem)] left-[8vw] font-mono text-[9px] tracking-[0.18em] text-oro/70"
+                  >
+                    Vos
+                  </span>
                 </div>
               </div>
             </div>
