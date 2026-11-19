@@ -26,15 +26,21 @@ Recorrés la percha del vestuario: una camiseta titular por jugador, con su fich
 - `/cronologia` El riel 3D del vestuario con diez camisetas históricas en orden cronológico. Arrastrá para recorrer las perchas y abrí una ficha para girar la camiseta. Los años se pueden compartir por enlace y cada ficha conserva la foto de archivo.
 - `/dorsal/[dorsal]` Ficha del jugador con la remera en primer plano (se gira arrastrando), retrato, estadísticas y datos. Metadata propia por jugador.
 - `/personaliza` Personalizador: nombre, número y talle estampados en vivo; **Guardar en Mis remeras** (pide ingresar si no hay sesión y vuelve con el diseño).
+- `/bombonera` Maqueta 3D del estadio con vista aérea y cinco ubicaciones de tribuna; incluye sonido opcional y plano alternativo sin WebGL.
+- `/idolos` Recorrido horizontal de diez leyendas controlado por scroll vertical: retrato, identidad, revelado de detalles y transición al siguiente ídolo. Incluye índice directo, progreso, adaptación móvil y lectura vertical con movimiento reducido. Fotografías, fuentes y fichas individuales en `/idolos/[slug]`.
+- `/trivia` Rondas de diez preguntas con reloj, corrección en servidor y fuentes por respuesta; `/trivia/ranking` muestra el ranking público.
+- `/carnet` Carnet de hincha con vista previa, frente y dorso, foto local opcional y descarga en PNG. El borrador se conserva al ingresar desde **Ingresá para guardarlo**.
 
 **Privadas** (requieren cuenta)
 - `/mis-remeras` ABM de remeras personalizadas: listado con vista previa, `/mis-remeras/nueva`, `/mis-remeras/[id]` (editar y borrar), `/mis-remeras/vestuario` (tus remeras colgadas en el riel 3D).
 - `/mi-xi` ABM de formaciones: listado con cancha, `/mi-xi/nuevo`, `/mi-xi/[id]`.
+- `/mi-carnet` Carnet guardado de cada usuario, con edición y baja.
+- `/trivia/mis-partidas` Partidas propias, con resumen, enlace para compartir ronda y baja.
 - `/login` Email y contraseña, o Google.
 
 ## Mapa de navegación
 
-El botón **Menú** abre la navegación principal en las cabeceras. Reúne el vestuario, la cronología, el museo, Journey, el personalizador y las secciones de cuenta. La página actual queda marcada. Se puede recorrer con Tab y cerrar con Escape o un clic fuera del panel.
+El botón **Menú** abre la navegación principal en las cabeceras. Reúne el vestuario, la cronología, el museo, Journey, los ídolos, la Bombonera, la trivia, el carnet, el personalizador y las secciones de cuenta. La página actual queda marcada. Se puede recorrer con Tab y cerrar con Escape o un clic fuera del panel. En pantallas bajas, el panel permite desplazarse para llegar a todos los enlaces.
 
 ```mermaid
 flowchart LR
@@ -83,7 +89,7 @@ erDiagram
 | **Tailwind CSS v4** | Tokens de diseño en `@theme` (`globals.css`). |
 | **zustand** | Estado del vestuario que la escena lee 60 veces por segundo fuera de React (`getState()`); con Context cada cambio re-renderizaría el árbol. |
 | **Context API** | Usuario activo (`SessionContext`): lo resuelve el layout raíz en el servidor y lo usan cabecera, personalizador y login. |
-| **Vitest** | 68 tests de lógica pura (riel, validaciones, rutas, geometría) en el pre-commit. |
+| **Vitest** | 406 tests de lógica (riel, validaciones, rutas, geometría, trivia y carnet) en el pre-commit. |
 
 **Server vs Client Components:** las páginas y layouts son Server Components (leen la sesión y Firestore). Son Client Components solo los que necesitan navegador: el vestuario 3D (cargado con `next/dynamic` sin SSR, porque WebGL no existe en el servidor), los formularios (estado, `useActionState`), el login (SDK de Firebase) y los que leen el Context de sesión.
 
@@ -129,6 +135,7 @@ npm run dev                     # http://localhost:4950
 | Comando | Qué hace |
 | --- | --- |
 | `npm run gate` | tests + lint + build |
+| `npx next build --webpack` | compilación alternativa cuando el entorno restringe los puertos internos de Turbopack |
 | `npm test` | tests de lógica pura (< 1 s, también en el pre-commit) |
 | `npm run smoke` | ABM completo contra Firestore real, incluida la prueba de que un usuario no accede a datos de otro |
 | `npm run seed` | crea el usuario de prueba con datos de ejemplo |

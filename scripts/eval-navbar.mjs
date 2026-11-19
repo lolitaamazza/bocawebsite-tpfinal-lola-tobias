@@ -48,7 +48,7 @@ try {
   await evaluate(`${trigger}.focus()`)
   await press('Enter', 13)
   await until(opened)
-  assert.equal(await evaluate(`${nav}.querySelectorAll('a').length`), 8)
+  assert.equal(await evaluate(`${nav}.querySelectorAll('a').length`), 13)
   assert.equal(await evaluate(`${nav}.querySelector('[aria-current="page"]').getAttribute('href')`), '/cronologia')
   await press('Tab', 9)
   assert.equal(await evaluate('document.activeElement.getAttribute("href")'), '/')

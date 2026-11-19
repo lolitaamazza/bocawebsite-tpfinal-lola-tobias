@@ -14,5 +14,5 @@ export function proxy(request) {
 }
 
 export const config = {
-  matcher: ['/mis-remeras/:path*', '/mi-xi/:path*'],
+  matcher: ['/mis-remeras/:path*', '/mi-xi/:path*', '/mi-carnet/:path*', '/trivia/mis-partidas/:path*'],
 }

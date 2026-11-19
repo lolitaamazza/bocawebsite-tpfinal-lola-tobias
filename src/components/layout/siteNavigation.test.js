@@ -4,7 +4,7 @@ import { currentNavPage, navigationLinks } from './siteNavigation'
 describe('Menú principal', () => {
   it('ofrece cada sección del sitio una sola vez y permite entrar a la cuenta', () => {
     const links = navigationLinks(false)
-    expect(links.map(({ href }) => href)).toEqual(['/', '/cronologia', '/museo', '/journey', '/personaliza', '/mis-remeras', '/mi-xi', '/login'])
+    expect(links.map(({ href }) => href)).toEqual(['/', '/cronologia', '/museo', '/journey', '/idolos', '/bombonera', '/trivia', '/carnet', '/personaliza', '/mis-remeras', '/mi-xi', '/mi-carnet', '/login'])
     expect(navigationLinks(true).map(({ href }) => href)).toEqual(links.slice(0, -1).map(({ href }) => href))
   })
 

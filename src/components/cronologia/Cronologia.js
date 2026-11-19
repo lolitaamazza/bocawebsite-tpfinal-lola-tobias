@@ -155,7 +155,7 @@ export function Cronologia() {
       )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_45%,transparent_55%,rgba(2,4,10,0.82)_100%)]" />
 
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-20 grid grid-cols-2 items-start gap-x-4 gap-y-2 bg-gradient-to-b from-fondo via-fondo/85 to-transparent px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-7 sm:px-8 md:grid-cols-[1fr_auto_1fr] md:pt-5">
+      <header className="pointer-events-none absolute inset-x-0 top-0 z-40 grid grid-cols-2 items-start gap-x-4 gap-y-2 bg-gradient-to-b from-fondo via-fondo/85 to-transparent px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-7 sm:px-8 md:grid-cols-[1fr_auto_1fr] md:pt-5">
         <SiteMenu className="col-start-1 row-start-1 justify-self-start" />
         <h1 className="col-span-2 row-start-2 text-center font-display text-[clamp(1.65rem,4vw,3.6rem)] leading-none uppercase md:col-span-1 md:col-start-2 md:row-start-1">
           Cronología de <span className="text-oro">camisetas</span>

@@ -3,12 +3,17 @@ const publicLinks = [
   { href: '/cronologia', label: 'Cronología de camisetas' },
   { href: '/museo', label: 'Museo de camisetas' },
   { href: '/journey', label: 'Journey 2000–2026' },
+  { href: '/idolos', label: 'Salón de ídolos' },
+  { href: '/bombonera', label: 'La Bombonera 3D' },
+  { href: '/trivia', label: 'Trivia xeneize' },
+  { href: '/carnet', label: 'Creá tu carnet de hincha' },
   { href: '/personaliza', label: 'Personalizá tu camiseta' },
 ]
 
 const accountLinks = [
   { href: '/mis-remeras', label: 'Mis remeras', private: true },
   { href: '/mi-xi', label: 'Mi XI ideal', private: true },
+  { href: '/mi-carnet', label: 'Mi carnet', private: true },
 ]
 
 export function navigationLinks(signedIn) {
