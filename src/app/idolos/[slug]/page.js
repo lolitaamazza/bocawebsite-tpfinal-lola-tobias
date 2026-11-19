@@ -1,9 +1,7 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Retrato } from '@/components/idolos/Retrato'
-import { SiteMenu } from '@/components/layout/SiteMenu'
-import { site } from '@/config/site'
+import { SectionHeader, headerLinkClass } from '@/components/layout/SectionHeader'
 import { idoloBySlug, idolos } from '@/data/idolos'
 import { apellido, formatEtapas, numero, temporadas, vecinos } from '@/engine/idolos'
 
@@ -43,20 +41,15 @@ export default async function IdoloPage({ params }) {
   const { prev, next } = vecinos(idolos, i.slug)
   return (
     <div className="paper-grunge min-h-dvh text-claro">
-      <header className="sticky top-0 z-40 bg-fondo/80 backdrop-blur">
-        <nav
-          className="flex items-center justify-between gap-4 border-b border-claro/15 px-3 py-2 font-mono text-[10px] tracking-[0.14em] uppercase md:px-4"
-          aria-label="Secciones"
-        >
-          <SiteMenu />
-          <Link href={`/idolos#${i.slug}`} className="hover:text-oro">
+      <SectionHeader
+        title="Salón de"
+        accent="ídolos"
+        end={
+          <Link href={`/idolos#${i.slug}`} className={headerLinkClass}>
             ← Salón de ídolos
           </Link>
-          <Link href="/" aria-label="Volver al vestuario">
-            <Image unoptimized src={site.crest.src} alt="" width={842} height={1000} className="h-6 w-auto" />
-          </Link>
-        </nav>
-      </header>
+        }
+      />
 
       <main className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:px-8 md:py-20">
         <Retrato idolo={i} priority sizes="(min-width: 768px) 45vw, 90vw" className="md:justify-self-end" />

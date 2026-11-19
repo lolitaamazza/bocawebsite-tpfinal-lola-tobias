@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Image from 'next/image'
+import { SectionBrand, headerLinkClass } from '@/components/layout/SectionHeader'
 import { SiteMenu } from '@/components/layout/SiteMenu'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
@@ -159,8 +160,8 @@ export function Recorrido() {
       <div ref={stage} className={styles.stage}>
         <header className={styles.masthead}>
           <SiteMenu />
-          <span>Archivo de indumentaria / CABJ</span>
-          <a href="#creditos" className={styles.creditLink}>Créditos ↘</a>
+          <SectionBrand title="Museo de" accent="camisetas" subtitle="Archivo de indumentaria / CABJ" />
+          <a href="#creditos" className={`${headerLinkClass} ${styles.creditLink}`}>Créditos ↘</a>
         </header>
 
         <div ref={track} className={styles.track} onFocusCapture={revealFocusedScene}>

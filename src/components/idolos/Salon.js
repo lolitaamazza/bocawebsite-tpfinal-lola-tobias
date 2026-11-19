@@ -6,8 +6,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { SectionBrand, headerLinkClass } from '@/components/layout/SectionHeader'
 import { SiteMenu } from '@/components/layout/SiteMenu'
-import { site } from '@/config/site'
 import { idolos } from '@/data/idolos'
 import { apellido, formatEtapas, iniciales, numero, temporadas } from '@/engine/idolos'
 import { Credito } from './Retrato'
@@ -141,11 +141,8 @@ export function Salon() {
       <h1 className="sr-only">Salón de ídolos de Boca Juniors</h1>
       <header className={styles.header}>
         <SiteMenu />
-        <Link href="/" aria-label="Volver al vestuario" className={focus}>
-          <Image unoptimized src={site.crest.src} alt="" width={842} height={1000} className="h-8 w-auto" />
-        </Link>
-        <span className="font-display text-lg uppercase">Salón de <span className="text-oro">ídolos</span></span>
-        <Link href="/journey" className={`${focus} ml-auto hidden font-mono text-[10px] uppercase sm:block`}>Journey ↗</Link>
+        <SectionBrand title="Salón de" accent="ídolos" />
+        <Link href="/journey" className={`${headerLinkClass} ml-auto hidden sm:block`}>Journey ↗</Link>
       </header>
 
       <div ref={stage} className={styles.stage} onKeyDown={keyboard} tabIndex={0} aria-label="Recorrido de ídolos. Bajá para descubrir su historia y avanzar hacia la derecha.">

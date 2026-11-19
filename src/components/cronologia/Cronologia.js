@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { camisetaId, camisetas, perchasHistoricas } from '@/data/cronologia'
 import { frameBus } from '@/three/frameBus'
-import { SiteMenu } from '@/components/layout/SiteMenu'
+import { SectionHeader, headerLinkClass } from '@/components/layout/SectionHeader'
 import { loadHistoricRail } from './railAssets'
 
 const Stage = dynamic(() => import('@/components/three/Stage').then((m) => m.Stage), { ssr: false })
@@ -155,13 +155,14 @@ export function Cronologia() {
       )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_85%_at_50%_45%,transparent_55%,rgba(2,4,10,0.82)_100%)]" />
 
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-40 grid grid-cols-2 items-start gap-x-4 gap-y-2 bg-gradient-to-b from-fondo via-fondo/85 to-transparent px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-7 sm:px-8 md:grid-cols-[1fr_auto_1fr] md:pt-5">
-        <SiteMenu className="col-start-1 row-start-1 justify-self-start" />
-        <h1 className="col-span-2 row-start-2 text-center font-display text-[clamp(1.65rem,4vw,3.6rem)] leading-none uppercase md:col-span-1 md:col-start-2 md:row-start-1">
-          Cronología de <span className="text-oro">camisetas</span>
-        </h1>
-        <Link href="/museo" className={`${focus} pointer-events-auto col-start-2 row-start-1 w-fit justify-self-end py-2 font-mono text-xs text-claro/80 hover:text-oro md:col-start-3`}>Museo ↗</Link>
-      </header>
+      <SectionHeader
+        variant="overlay"
+        wide
+        title="Cronología de"
+        accent="camisetas"
+        titleAs="h1"
+        end={<Link href="/museo" className={headerLinkClass}>Museo ↗</Link>}
+      />
 
       <div ref={caption} aria-hidden="true" className="text-shadow-scene pointer-events-none absolute top-0 left-0 z-10 whitespace-nowrap font-mono text-sm text-oro">
         {!selected && !error && hovered ? hovered.year : null}
@@ -171,11 +172,11 @@ export function Cronologia() {
         <article
           ref={card}
           aria-labelledby="camiseta-titulo"
-          className="absolute inset-x-3 bottom-[8.35rem] z-20 max-h-[33dvh] overflow-y-auto border border-oro/30 bg-fondo/95 p-4 shadow-2xl backdrop-blur-md min-[900px]:landscape:inset-x-auto min-[900px]:landscape:right-[4%] min-[900px]:landscape:bottom-auto min-[900px]:landscape:top-[23%] min-[900px]:landscape:max-h-[55dvh] min-[900px]:landscape:w-[min(39%,32rem)] min-[900px]:landscape:p-7"
+          className="absolute inset-x-3 bottom-[8.35rem] z-20 max-h-[33dvh] overflow-y-auto rounded-2xl border border-white/10 bg-fondo/95 p-4 shadow-2xl backdrop-blur-md min-[900px]:landscape:inset-x-auto min-[900px]:landscape:right-[4%] min-[900px]:landscape:bottom-auto min-[900px]:landscape:top-[23%] min-[900px]:landscape:max-h-[55dvh] min-[900px]:landscape:w-[min(39%,32rem)] min-[900px]:landscape:p-7"
         >
           <div className="flex items-start justify-between gap-3">
-            <p className="font-mono text-xs text-oro">{item.year} / {item.season}</p>
-            {!error && <button type="button" aria-label="Cerrar ficha" onClick={() => select(null)} className={`${focus} -mt-1 grid size-8 shrink-0 place-items-center text-xl leading-none text-oro hover:bg-oro/10`}>×</button>}
+            <p className="eyebrow text-oro">{item.year} / {item.season}</p>
+            {!error && <button type="button" aria-label="Cerrar ficha" onClick={() => select(null)} className={`${focus} -mt-1 grid size-8 shrink-0 place-items-center rounded-full text-xl leading-none text-oro hover:bg-oro/10`}>×</button>}
           </div>
           <h2 id="camiseta-titulo" className="mt-1 font-display text-[clamp(1.65rem,3vw,3.15rem)] leading-none uppercase">{item.title}</h2>
           <p className="mt-2.5 max-w-[43ch] text-sm leading-relaxed text-claro/85 md:text-base">{item.description}</p>
@@ -187,7 +188,7 @@ export function Cronologia() {
       )}
 
       <footer className="pointer-events-none absolute inset-x-0 bottom-0 z-30 bg-gradient-to-t from-fondo via-fondo/95 to-transparent px-3 pt-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8">
-        <p className="mb-3 text-center font-mono text-[10px] tracking-wide text-claro/80 sm:text-xs">
+        <p className="eyebrow mb-3 text-center text-claro/60">
           {error ? 'Fotos de archivo' : selected ? 'Arrastrá la camiseta para girarla' : 'Arrastrá el riel · Elegí una camiseta'}
         </p>
         <nav aria-label="Línea de tiempo de camisetas" className="pointer-events-auto mx-auto max-w-5xl">

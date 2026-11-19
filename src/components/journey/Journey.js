@@ -7,8 +7,7 @@ import Lenis from 'lenis'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { site } from '@/config/site'
-import { SiteMenu } from '@/components/layout/SiteMenu'
+import { SectionHeader, headerLinkClass } from '@/components/layout/SectionHeader'
 import { journey, journeyYears } from '@/data/journey'
 import { hitoIndexForYear, rollOffsets } from '@/engine/journey'
 
@@ -102,31 +101,26 @@ export function Journey() {
   const activeYear = journey[active].year
 
   return (
-    <div ref={root} className="relative min-h-dvh bg-claro text-fondo">
-      {/* cabecera fina con línea, como la referencia */}
-      <header className="fixed inset-x-0 top-0 z-40 bg-claro/90 backdrop-blur">
-        <nav
-          className="flex items-center justify-between gap-4 border-b border-fondo/70 px-3 py-2 font-mono text-[10px] tracking-[0.14em] uppercase md:px-4"
-          aria-label="Secciones"
-        >
-          <SiteMenu />
-          <Link href="/museo" className="hidden hover:text-azul sm:inline">
-            Museo
-          </Link>
-          <Link href="/" aria-label="Volver al vestuario" className="flex items-center gap-2">
-            <Image unoptimized src={site.crest.src} alt="" width={842} height={1000} className="h-6 w-auto" />
-          </Link>
-          <span aria-current="page" className="text-azul">
-            Journey
-          </span>
-          <Link href="/mis-remeras" className="hidden hover:text-azul sm:inline">
-            Mis remeras
-          </Link>
-        </nav>
-      </header>
+    <div ref={root} className="relative min-h-dvh bg-fondo text-claro">
+      <SectionHeader
+        variant="fixed"
+        wide
+        title="Journey"
+        accent="2000–2026"
+        end={
+          <nav aria-label="Secciones" className="flex items-center gap-1">
+            <Link href="/museo" className={`${headerLinkClass} hidden sm:inline-block`}>
+              Museo
+            </Link>
+            <Link href="/mis-remeras" className={`${headerLinkClass} hidden sm:inline-block`}>
+              Mis remeras
+            </Link>
+          </nav>
+        }
+      />
 
       {/* columna de años */}
-      <nav aria-label="Años" className="fixed top-[4.25rem] bottom-6 left-3 z-30 hidden flex-col justify-between md:flex">
+      <nav aria-label="Años" className="fixed top-[5.5rem] bottom-6 left-4 z-30 hidden flex-col justify-between md:flex">
         {journeyYears.map((y) => {
           const has = conHito.has(y)
           const isActive = y === activeYear
@@ -137,10 +131,10 @@ export function Journey() {
               onClick={() => goTo(y)}
               aria-current={isActive ? 'true' : undefined}
               className={`flex items-center gap-1.5 text-left font-mono text-[10px] tabular-nums transition-colors duration-300 ${
-                isActive ? 'text-fondo' : has ? 'text-fondo/40 hover:text-fondo' : 'text-fondo/15 hover:text-fondo/50'
+                isActive ? 'text-oro' : has ? 'text-claro/45 hover:text-claro' : 'text-claro/15 hover:text-claro/50'
               }`}
             >
-              <span className={`h-1.5 w-1.5 bg-fondo transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`} />
+              <span className={`h-1.5 w-1.5 rounded-full bg-oro transition-opacity ${isActive ? 'opacity-100' : 'opacity-0'}`} />
               {y}
             </button>
           )
@@ -151,7 +145,7 @@ export function Journey() {
       <div
         aria-live="polite"
         aria-label={`Año ${activeYear}`}
-        className="pointer-events-none fixed inset-x-0 top-[16vh] z-20 -translate-y-1/2 md:top-1/2 text-center font-sans text-[clamp(5rem,15vw,15rem)] leading-none font-light tracking-[-0.04em] text-white mix-blend-difference"
+        className="pointer-events-none fixed inset-x-0 top-[16vh] z-20 -translate-y-1/2 md:top-1/2 text-center font-display text-[clamp(5.5rem,17vw,17rem)] leading-none text-white mix-blend-difference"
       >
         {[0, 1, 2, 3].map((i) => (
           // Rodillo de una cifra: columna 0–9 que se desliza hasta la cifra pedida
@@ -169,17 +163,17 @@ export function Journey() {
 
       {/* apertura */}
       <section className="relative flex min-h-dvh flex-col items-center justify-end px-6 pb-[12vh] text-center">
-        <p className="overflow-hidden font-mono text-[11px] tracking-[0.3em] uppercase">
+        <p className="eyebrow overflow-hidden text-oro">
           <span data-hero-line className="block">
             Boca Juniors · Journey
           </span>
         </p>
-        <p className="mt-3 max-w-[46ch] overflow-hidden text-[15px] leading-relaxed text-fondo/70">
+        <p className="mt-3 max-w-[46ch] overflow-hidden text-[15px] leading-relaxed text-claro/65">
           <span data-hero-line className="block">
             Veintisiete años en azul y oro, del campeón del mundo en Tokio al plantel de hoy. Bajá despacio.
           </span>
         </p>
-        <span className="animate-nudge mt-6 inline-block text-lg" aria-hidden="true">
+        <span className="animate-nudge mt-6 inline-block text-lg text-oro" aria-hidden="true">
           ↓
         </span>
       </section>
@@ -195,7 +189,7 @@ export function Journey() {
             aria-label={`${h.year}, ${h.month}`}
           >
             <span className="hidden md:block" />
-            <figure className="relative h-[92vh] overflow-hidden bg-fondo/10">
+            <figure className="relative h-[92vh] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
               {h.foto ? (
                 <>
                   <div data-img className="absolute inset-0 will-change-transform">
@@ -207,7 +201,7 @@ export function Journey() {
                       className="object-cover"
                     />
                   </div>
-                  <figcaption className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/60 to-transparent px-3 pt-8 pb-2 font-mono text-[9px] tracking-[0.08em] text-white/80 uppercase">
+                  <figcaption className="absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/60 to-transparent px-3 pt-8 pb-2 font-mono text-[9px] tracking-[0.08em] text-claro/80 uppercase">
                     {h.foto.caption}{' '}
                     <a
                       href={h.foto.page}
@@ -223,11 +217,11 @@ export function Journey() {
             </figure>
             <div className="relative md:pl-4">
               <div data-text className="sticky top-[46vh] mt-6 max-w-[34ch] md:mt-0 md:pr-4">
-                <p className="flex items-center gap-1.5 font-mono text-[10px] tracking-[0.12em] uppercase">
-                  <span className="h-1.5 w-1.5 bg-fondo" />
+                <p className="eyebrow flex items-center gap-1.5 text-oro">
+                  <span className="h-1.5 w-1.5 rounded-full bg-oro" />
                   {h.month} · {h.year}
                 </p>
-                <p className="mt-2 text-[clamp(1rem,1.35vw,1.3rem)] leading-snug">{h.text}</p>
+                <p className="mt-2 text-[clamp(1rem,1.35vw,1.3rem)] leading-snug text-claro/85">{h.text}</p>
               </div>
             </div>
           </li>
@@ -236,13 +230,13 @@ export function Journey() {
 
       {/* cierre */}
       <section className="relative flex min-h-[80vh] flex-col items-center justify-center gap-6 px-6 text-center">
-        <p className="font-mono text-[11px] tracking-[0.3em] uppercase">Continuará</p>
-        <p className="max-w-[40ch] text-[clamp(1.4rem,2.6vw,2.4rem)] leading-tight">
+        <p className="eyebrow text-oro">Continuará</p>
+        <p className="max-w-[24ch] font-display text-[clamp(2rem,4.5vw,4rem)] leading-[0.95] uppercase [text-wrap:balance]">
           Lo que sigue lo escribe el plantel que cuelga en el vestuario.
         </p>
         <Link
           href="/"
-          className="font-mono inline-flex h-11 items-center gap-2 border border-fondo px-6 text-[11px] tracking-[0.16em] uppercase transition-colors hover:bg-fondo hover:text-claro"
+          className="eyebrow inline-flex h-11 items-center gap-2 rounded-full bg-oro px-6 text-[11px] text-fondo shadow-lg shadow-black/40 transition-[filter] hover:brightness-110"
         >
           Volver al vestuario →
         </Link>

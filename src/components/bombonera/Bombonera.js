@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { SiteMenu } from '@/components/layout/SiteMenu'
+import { SectionHeader } from '@/components/layout/SectionHeader'
 import { useReducedMotion, useWebGL2 } from '@/components/vitrina/support'
 import { UBICACIONES, spotSeat } from '@/three/bombonera/layout'
 import { CrowdSound } from './crowdSound'
@@ -162,28 +162,29 @@ export function Bombonera() {
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_50%_40%,transparent_55%,rgba(2,4,10,0.75)_100%)]" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-fondo/90 via-fondo/40 to-transparent" />
 
-        <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between gap-4 bg-gradient-to-b from-fondo/90 via-fondo/50 to-transparent px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-10 sm:px-8 md:pt-5">
-          <div className="flex items-start gap-3 sm:gap-5">
-            <SiteMenu />
-            <div>
-              <p className="eyebrow text-oro">Estadio Alberto J. Armando</p>
-              <h1 id="bombonera-title" className="mt-1 font-display text-[clamp(2.1rem,5.5vw,4.6rem)] leading-[0.88] uppercase">
-                La Bombonera
-              </h1>
-            </div>
-          </div>
-          {three ? (
-            <button
-              type="button"
-              aria-pressed={audible}
-              onClick={toggleSound}
-              className={`${focus} eyebrow pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border border-oro/35 bg-fondo/80 px-4 text-oro hover:border-oro aria-pressed:bg-oro aria-pressed:text-fondo`}
-            >
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-              {audible ? 'Sonido encendido' : 'Sonido apagado'}
-            </button>
-          ) : null}
-        </header>
+        <SectionHeader
+          variant="overlay"
+          wide
+          className="z-20"
+          title="La"
+          accent="Bombonera"
+          subtitle="Estadio Alberto J. Armando"
+          titleAs="h1"
+          titleId="bombonera-title"
+          end={
+            three ? (
+              <button
+                type="button"
+                aria-pressed={audible}
+                onClick={toggleSound}
+                className={`${focus} eyebrow pointer-events-auto inline-flex min-h-11 items-center gap-2 rounded-full border border-oro/35 bg-fondo/80 px-4 text-oro hover:border-oro aria-pressed:bg-oro aria-pressed:text-fondo`}
+              >
+                <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+                {audible ? 'Sonido encendido' : 'Sonido apagado'}
+              </button>
+            ) : null
+          }
+        />
 
         {plan ? (
           <p className="absolute inset-x-4 top-[5.6rem] z-10 text-xs text-claro/60 sm:inset-x-8 lg:top-auto lg:bottom-10 lg:left-auto lg:right-[22rem] lg:max-w-xs lg:text-right">
