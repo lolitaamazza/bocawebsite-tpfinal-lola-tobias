@@ -1,0 +1,102 @@
+/* Escenario 3D del carnet: inclinación con el puntero, vuelta para ver el dorso y
+   brillo holográfico. Las variables las mueve CarnetCard sin re-render de React. */
+
+.stage {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  perspective: 1400px;
+  touch-action: manipulation;
+}
+
+.tilt {
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.stage[data-active] .tilt {
+  transition-duration: 0.12s;
+}
+
+.flipper {
+  position: relative;
+  aspect-ratio: 856 / 540;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+  cursor: pointer;
+}
+
+.flipper[data-flipped='true'] {
+  transform: rotateY(180deg);
+}
+
+/* Radio de una ID-1 (3,18 mm) en % de cada lado */
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: 3.74% / 5.93%;
+  transform: rotateY(0deg) translateZ(1px);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: linear-gradient(135deg, #0d1c47, #0a1430);
+  box-shadow:
+    0 40px 70px -30px rgb(0 0 0 / 0.85),
+    0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.back {
+  transform: rotateY(180deg) translateZ(1px);
+  background: linear-gradient(135deg, #0a1430, #060c1f);
+}
+
+.face > * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Holograma: un barrido iridiscente que sigue al puntero + un reflejo puntual */
+.sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at var(--mx) var(--my), rgb(255 255 255 / 0.3), transparent 42%),
+    linear-gradient(115deg, transparent 25%, rgb(255 226 154 / 0.55) 40%, rgb(140 210 255 / 0.45) 48%, rgb(255 140 220 / 0.35) 56%, transparent 70%);
+  background-size:
+    100% 100%,
+    260% 260%;
+  background-position:
+    0 0,
+    var(--mx) var(--my);
+  mix-blend-mode: color-dodge;
+  opacity: 0.16;
+  transition: opacity 0.4s ease;
+}
+
+.stage[data-active] .sheen {
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt,
+  .flipper,
+  .sheen {
+    transition: none;
+  }
+  .tilt {
+    transform: none;
+  }
+  .stage[data-active] .sheen {
+    opacity: 0.16;
+  }
+}

@@ -27,6 +27,7 @@ export default async function CuentaLayout({ children }) {
             <NavLink href="/">Vestuario</NavLink>
             <NavLink href="/mis-remeras">Mis remeras</NavLink>
             <NavLink href="/mi-xi">Mi XI</NavLink>
+            <NavLink href="/mi-carnet">Mi carnet</NavLink>
           </nav>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden max-w-[16ch] truncate text-sm text-claro/60 sm:block" title={user.email ?? ''}>
