@@ -1,0 +1,102 @@
+{
+ "maradona": {
+  "src": "/idolos/maradona.webp",
+  "width": 563,
+  "height": 800,
+  "caption": "Tapa de El Gráfico: Maradona festeja en su debut con Boca, ante Talleres, 1981.",
+  "author": "Gerardo Prego",
+  "license": "Public domain",
+  "date": "1981-02-24",
+  "page": "https://commons.wikimedia.org/wiki/File:Maradona_boca_1981.jpg"
+ },
+ "riquelme": {
+  "src": "/idolos/riquelme.webp",
+  "width": 1400,
+  "height": 2091,
+  "caption": "Riquelme con Boca ante el Espanyol, en Barcelona, 2011.",
+  "author": "Xavier Rondón Medina",
+  "license": "CC BY-SA 2.0",
+  "date": "2011-07-27",
+  "page": "https://commons.wikimedia.org/wiki/File:Riquelme_boca_vs_espanyol_2011.jpg"
+ },
+ "palermo": {
+  "src": "/idolos/palermo.webp",
+  "width": 874,
+  "height": 1171,
+  "caption": "Palermo con Boca en la Audi Cup de Múnich, 2009.",
+  "author": "Chivista",
+  "license": "CC BY-SA 3.0 de",
+  "date": "2009-07-29",
+  "page": "https://commons.wikimedia.org/wiki/File:Mart%C3%ADn_Palermo.jpg"
+ },
+ "tevez": {
+  "src": "/idolos/tevez.webp",
+  "width": 755,
+  "height": 1187,
+  "caption": "Tevez ante Independiente del Valle, semifinal de la Libertadores 2016.",
+  "author": "Agencia de Noticias ANDES",
+  "license": "CC BY-SA 2.0",
+  "date": "7 July 201",
+  "page": "https://commons.wikimedia.org/wiki/File:InddelVal-Boca_(4).jpg"
+ },
+ "rattin": {
+  "src": "/idolos/rattin.webp",
+  "width": 873,
+  "height": 1205,
+  "caption": "Rattín saluda a la tribuna con la camiseta de Boca.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "circa 1969",
+  "page": "https://commons.wikimedia.org/wiki/File:Rattin_waving_crowd.jpg"
+ },
+ "marzolini": {
+  "src": "/idolos/marzolini.webp",
+  "width": 1400,
+  "height": 1845,
+  "caption": "Marzolini en la tapa de El Gráfico, julio de 1972.",
+  "author": "El Gráfico",
+  "license": "Public domain",
+  "date": "",
+  "page": "https://commons.wikimedia.org/wiki/File:Silvio_Marzolini_(Boca)_-_El_Gr%C3%A1fico_2755.jpg"
+ },
+ "gatti": {
+  "src": "/idolos/gatti.webp",
+  "width": 858,
+  "height": 1024,
+  "caption": "Hugo Gatti en el arco de Boca, hacia 1977.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "circa 1977",
+  "page": "https://commons.wikimedia.org/wiki/File:Hugo_gatti_boca.jpg"
+ },
+ "rojas": {
+  "src": "/idolos/rojas.webp",
+  "width": 960,
+  "height": 816,
+  "caption": "Rojitas gambetea en la Bombonera, década de 1960.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "circa 1966",
+  "page": "https://commons.wikimedia.org/wiki/File:Rojitas_dribbling.jpg"
+ },
+ "varallo": {
+  "src": "/idolos/varallo.webp",
+  "width": 381,
+  "height": 466,
+  "caption": "Varallo con la camiseta de Boca, hacia 1931.",
+  "author": "Autor desconocido",
+  "license": "Public domain",
+  "date": "circa 1931",
+  "page": "https://commons.wikimedia.org/wiki/File:Varallo_boca_portrait.jpg"
+ },
+ "bianchi": {
+  "src": "/idolos/bianchi.webp",
+  "width": 504,
+  "height": 675,
+  "caption": "Bianchi en la Legislatura porteña, diciembre de 2012.",
+  "author": "Gobierno de la Ciudad de Buenos Aires",
+  "license": "CC BY 4.0",
+  "date": "2012-12-04",
+  "page": "https://commons.wikimedia.org/wiki/File:Carlos_Bianchi_2012.jpg"
+ }
+}
