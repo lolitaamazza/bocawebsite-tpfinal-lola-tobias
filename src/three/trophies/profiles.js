@@ -1,147 +1,213 @@
 import { monotone } from './spline'
 
 /**
- * Trofeos de la Vitrina, hechos por código (sin modelos de terceros). Cada uno
- * es una silueta que gira alrededor del eje Y (LatheGeometry) más detalles:
- * asas (toros), una pelota arriba y una base escalonada laqueada.
+ * Trofeos reales de la Vitrina de Boca, modelados por código con sus
+ * proporciones, materiales y detalles característicos:
+ *  - Copa Libertadores: pedestal alto de madera caoba con filas de chapitas
+ *    metálicas de los campeones, cuerpo de plata con globo central, dos asas
+ *    en el globo, tapa escalonada y el futbolista pateando sobre el mundo arriba.
+ *  - Copa Intercontinental: base oscura con placas, cáliz imperial de oro con
+ *    tallos anillados, dos asas altas y corona con pelota arriba.
+ *  - Copa Sudamericana: base escalonada con placas, columna anillada de plata
+ *    que sostiene la gran esfera superior rodeada por su anillo inclinado.
+ *  - Copa Argentina: pedestal negro con placas, columna facetada de plata con
+ *    aletas verticales que abrazan la pelota en la boca superior.
+ *  - Primera División: base de madera con aro y placa dorada, copa clásica
+ *    dorada con asas laterales.
  *
- * Unidades: metros "de vitrina". Las siluetas se escriben como nudos [y, r]
- * (altura, radio) con y creciente; una cúbica monótona los une sin pasarse, así
- * el radio nunca se vuelve negativo ni la pared se cruza consigo misma.
  * Este módulo no importa three: se prueba en node (trophies.test.js).
  */
 export const TROPHIES = {
-  // Alta y fina, sobre una base alta de madera laqueada, con tapa y pelota arriba
+  // Pedestal alto de caoba lleno de chapitas + globo central con asas + tapa y jugador pateando arriba
   libertadores: {
     name: 'Copa Libertadores',
-    plinth: { shape: 'square', steps: [[0.1, 0.035], [0.084, 0.13], [0.07, 0.018]] },
-    body: {
-      outer: [
-        [0, 0.06],
-        [0.01, 0.06],
-        [0.022, 0.05],
-        [0.048, 0.022],
-        [0.072, 0.015],
-        [0.088, 0.028],
-        [0.104, 0.015],
-        [0.15, 0.018],
-        [0.175, 0.032],
-        [0.215, 0.06],
-        [0.265, 0.078],
-        [0.33, 0.07],
-        [0.372, 0.064],
-        [0.392, 0.078],
-        [0.402, 0.074],
-        [0.42, 0.06],
-        [0.442, 0.034],
-        [0.456, 0.014],
-        [0.474, 0.012],
+    metal: 'silver',
+    plinthColor: '#261109',
+    plaques: { rows: 4, cols: 8 },
+    plinth: {
+      shape: 'round',
+      steps: [
+        [0.098, 0.024],
+        [0.086, 0.135],
+        [0.074, 0.018],
       ],
     },
-    finial: { y: 0.504, r: 0.034 },
+    body: {
+      outer: [
+        [0, 0.064],
+        [0.012, 0.064],
+        [0.026, 0.048],
+        [0.048, 0.022],
+        [0.072, 0.016],
+        [0.09, 0.028],
+        [0.108, 0.016],
+        [0.138, 0.022],
+        [0.165, 0.056],
+        [0.2, 0.076],
+        [0.235, 0.08],
+        [0.27, 0.075],
+        [0.3, 0.054],
+        [0.322, 0.068],
+        [0.336, 0.062],
+        [0.365, 0.042],
+        [0.395, 0.022],
+        [0.415, 0.014],
+        [0.432, 0.024],
+        [0.448, 0.026],
+        [0.464, 0.018],
+        [0.476, 0.008],
+      ],
+    },
+    handles: { y: 0.235, R: 0.038, tube: 0.0075, arc: Math.PI * 1.24 },
+    finial: { y: 0.506, r: 0.028 },
+    figurine: true,
+    spin: true,
     segments: 48,
     layout: { spacing: 0.44, maxPerRow: 8, rowGap: 0.36, rowRise: 0.08 },
   },
-  // Copa ancha de dos asas, sobre mármol negro
+
+  // Copa Intercontinental (Europeo-Sudamericana / Toyota): cáliz de oro con dos asas altas y pelota en la corona
   intercontinental: {
     name: 'Copa Intercontinental',
-    plinth: { shape: 'round', steps: [[0.115, 0.03], [0.1, 0.04]] },
-    body: {
-      outer: [
-        [0, 0.078],
-        [0.01, 0.078],
-        [0.024, 0.062],
-        [0.05, 0.03],
-        [0.078, 0.02],
-        [0.094, 0.032],
-        [0.11, 0.021],
-        [0.128, 0.034],
-        [0.16, 0.095],
-        [0.205, 0.14],
-        [0.255, 0.158],
-        [0.3, 0.165],
-      ],
-      inner: [
-        [0.172, 0],
-        [0.185, 0.07],
-        [0.215, 0.125],
-        [0.26, 0.146],
-        [0.3, 0.154],
+    metal: 'gold',
+    plinthColor: '#0b1018',
+    plaques: { rows: 1, cols: 4 },
+    plinth: {
+      shape: 'round',
+      steps: [
+        [0.112, 0.028],
+        [0.096, 0.044],
+        [0.082, 0.014],
       ],
     },
-    handles: { y: 0.252, R: 0.046, tube: 0.011, arc: Math.PI * 1.3 },
+    body: {
+      outer: [
+        [0, 0.076],
+        [0.012, 0.076],
+        [0.026, 0.058],
+        [0.052, 0.026],
+        [0.076, 0.019],
+        [0.094, 0.032],
+        [0.112, 0.02],
+        [0.132, 0.036],
+        [0.165, 0.096],
+        [0.21, 0.138],
+        [0.26, 0.156],
+        [0.305, 0.162],
+      ],
+      inner: [
+        [0.18, 0],
+        [0.194, 0.068],
+        [0.225, 0.122],
+        [0.265, 0.144],
+        [0.305, 0.151],
+      ],
+    },
+    handles: { y: 0.248, R: 0.046, tube: 0.0105, arc: Math.PI * 1.3 },
+    crownBall: { y: 0.272, r: 0.034 },
     spin: true,
     segments: 48,
     layout: { spacing: 0.8, maxPerRow: 4, rowGap: 0.5, rowRise: 0.08 },
   },
-  // Muy alta y delgada, con la boca abierta en trompeta
+
+  // Copa Sudamericana: base con placas, fuste anillado de plata y gran globo superior con anillo inclinado
   sudamericana: {
     name: 'Copa Sudamericana',
-    plinth: { shape: 'round', steps: [[0.088, 0.028], [0.072, 0.05]] },
-    body: {
-      outer: [
-        [0, 0.056],
-        [0.01, 0.056],
-        [0.022, 0.044],
-        [0.045, 0.02],
-        [0.12, 0.016],
-        [0.24, 0.014],
-        [0.262, 0.026],
-        [0.284, 0.014],
-        [0.35, 0.018],
-        [0.405, 0.04],
-        [0.44, 0.078],
-        [0.462, 0.112],
-        [0.475, 0.128],
-      ],
-      inner: [
-        [0.43, 0],
-        [0.442, 0.04],
-        [0.455, 0.085],
-        [0.468, 0.11],
-        [0.475, 0.118],
+    metal: 'silver',
+    plinthColor: '#1b100b',
+    plaques: { rows: 2, cols: 6 },
+    plinth: {
+      shape: 'round',
+      steps: [
+        [0.096, 0.026],
+        [0.082, 0.052],
+        [0.07, 0.014],
       ],
     },
+    body: {
+      outer: [
+        [0, 0.064],
+        [0.012, 0.064],
+        [0.028, 0.048],
+        [0.06, 0.028],
+        [0.1, 0.024],
+        [0.14, 0.034],
+        [0.16, 0.024],
+        [0.2, 0.026],
+        [0.23, 0.038],
+        [0.25, 0.028],
+        [0.285, 0.036],
+        [0.315, 0.058],
+        [0.34, 0.044],
+        [0.365, 0.076],
+        [0.395, 0.098],
+        [0.425, 0.096],
+        [0.452, 0.074],
+        [0.47, 0.038],
+        [0.478, 0.012],
+      ],
+    },
+    halo: { y: 0.41, R: 0.112, tube: 0.0085, tilt: 0.38 },
+    ribs: { count: 8, y0: 0.04, y1: 0.31, r: 0.024, tube: 0.004 },
+    spin: true,
     segments: 48,
     layout: { spacing: 0.72, maxPerRow: 4, rowGap: 0.36, rowRise: 0.08 },
   },
-  // Petisa y panzona, con dos asas grandes como orejas
+
+  // Copa Argentina: pedestal oscuro, fuste facetado de plata que se abre abrazando la pelota arriba
   'copa-argentina': {
     name: 'Copa Argentina',
-    plinth: { shape: 'round', steps: [[0.105, 0.028], [0.09, 0.034]] },
-    body: {
-      outer: [
-        [0, 0.07],
-        [0.01, 0.07],
-        [0.02, 0.058],
-        [0.036, 0.034],
-        [0.052, 0.026],
-        [0.066, 0.05],
-        [0.09, 0.098],
-        [0.125, 0.12],
-        [0.165, 0.117],
-        [0.195, 0.104],
-        [0.212, 0.11],
-        [0.222, 0.116],
-      ],
-      inner: [
-        [0.082, 0],
-        [0.095, 0.06],
-        [0.12, 0.1],
-        [0.165, 0.104],
-        [0.195, 0.093],
-        [0.222, 0.106],
+    metal: 'silver',
+    plinthColor: '#090c12',
+    plaques: { rows: 1, cols: 6 },
+    plinth: {
+      shape: 'round',
+      steps: [
+        [0.102, 0.026],
+        [0.088, 0.046],
+        [0.074, 0.014],
       ],
     },
-    handles: { y: 0.14, R: 0.052, tube: 0.01, arc: Math.PI * 1.35 },
+    body: {
+      outer: [
+        [0, 0.068],
+        [0.012, 0.068],
+        [0.028, 0.05],
+        [0.056, 0.034],
+        [0.095, 0.032],
+        [0.135, 0.044],
+        [0.175, 0.066],
+        [0.21, 0.092],
+        [0.242, 0.112],
+        [0.262, 0.118],
+      ],
+      inner: [
+        [0.19, 0],
+        [0.202, 0.048],
+        [0.225, 0.082],
+        [0.246, 0.102],
+        [0.262, 0.11],
+      ],
+    },
+    flutes: { count: 10, y0: 0.03, y1: 0.252, r0: 0.034, r1: 0.108, tube: 0.005 },
+    innerBall: { y: 0.22, r: 0.042 },
     spin: true,
     segments: 48,
     layout: { spacing: 0.62, maxPerRow: 6, rowGap: 0.42, rowRise: 0.08 },
   },
-  // Copita chica: son 36, van en gradas de 12
+
+  // Primera División / Liga Profesional: son 36, van en 3 gradas de 12
   liga: {
     name: 'Primera División',
-    plinth: { shape: 'round', steps: [[0.046, 0.016], [0.039, 0.026]] },
+    metal: 'gold',
+    plinthColor: '#1f1008',
+    plinth: {
+      shape: 'round',
+      steps: [
+        [0.046, 0.016],
+        [0.039, 0.026],
+      ],
+    },
     body: {
       outer: [
         [0, 0.033],
@@ -161,6 +227,7 @@ export const TROPHIES = {
         [0.114, 0.037],
       ],
     },
+    ears: { y: 0.088, R: 0.011, tube: 0.0024 },
     segments: 28,
     detail: 0.6,
     layout: { spacing: 0.24, maxPerRow: 12, rowGap: 0.19, rowRise: 0.055 },
@@ -213,10 +280,9 @@ export function sampleSilhouette(knots, n) {
 }
 
 /**
- * Perfil completo del cuerpo dorado para LatheGeometry, como [x, y]:
+ * Perfil completo del cuerpo metálico para LatheGeometry, como [x, y]:
  * eje abajo → afuera por el pie → sube por la pared → labio → (si es copa
- * abierta) baja por adentro hasta el eje. Recorrerlo en ese sentido deja las
- * normales hacia afuera por fuera y hacia el hueco por dentro.
+ * abierta) baja por adentro hasta el eje.
  */
 export function bodyProfile(trophy) {
   const k = trophy.detail ?? 1
@@ -307,15 +373,13 @@ export function handlePlacement(trophy) {
     arc,
     rivet,
     ends: [top, bottom],
-    // el punto más afuera del asa (la mitad del arco)
     apex: [center[0] + R * Math.cos(angle), center[1] + R * Math.sin(angle)],
     reach: Math.max(center[0] + R + tube, top[0] + rivet, bottom[0] + rivet),
     top: Math.max(center[1] + R + tube, top[1] + rivet),
   }
 }
 
-
-/** Filete dorado de la base: aro en las redondas, placa al frente en las cuadradas */
+/** Filete y chapitas metálicas de la base */
 export function plinthTrim(trophy) {
   const { steps, shape } = trophy.plinth
   let y = 0
@@ -327,7 +391,16 @@ export function plinthTrim(trophy) {
   const top = plinthHeight(trophy)
   const [wt] = steps[steps.length - 1]
   const band = Math.min(0.01, steps[steps.length - 1][1] * 0.3)
-  return { kind: 'band', r: wt + 0.0012, y0: top - band * 1.6, y1: top - band * 0.6 }
+  return {
+    kind: 'band',
+    r: wt + 0.0012,
+    y0: top - band * 1.6,
+    y1: top - band * 0.6,
+    tierR: w,
+    tierY: y,
+    tierH: h,
+    plaques: trophy.plaques ?? null,
+  }
 }
 
 /** Medidas que necesita el armado de los estantes */
@@ -337,10 +410,14 @@ export function trophyMetrics(trophy) {
   let body = outer[outer.length - 1][0]
   let radius = Math.max(...outer.map((k) => k[1]))
   if (trophy.finial) body = Math.max(body, trophy.finial.y + trophy.finial.r)
+  if (trophy.innerBall) body = Math.max(body, trophy.innerBall.y + trophy.innerBall.r)
   if (trophy.handles) {
     const h = handlePlacement(trophy)
     body = Math.max(body, h.top)
     radius = Math.max(radius, h.reach)
+  }
+  if (trophy.halo) {
+    radius = Math.max(radius, trophy.halo.R + trophy.halo.tube)
   }
   const maxW = Math.max(...trophy.plinth.steps.map(([w]) => w))
   const plinthRadius = trophy.plinth.shape === 'square' ? maxW * Math.SQRT2 : maxW

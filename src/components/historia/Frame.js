@@ -17,7 +17,7 @@ export function Frame({ src, alt, clip, aspect = 1.4, color = false, parallax = 
         data-parallax={parallax ? '' : undefined}
         className={`absolute inset-y-0 ${parallax ? '-inset-x-[12%]' : 'inset-x-0'} will-change-transform`}
       >
-        <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+        <Image src={src} alt={alt} fill loading="eager" decoding="async" sizes={sizes} className="object-cover" />
       </div>
     </div>
   )

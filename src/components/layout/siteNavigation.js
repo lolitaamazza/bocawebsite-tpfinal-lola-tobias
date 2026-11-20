@@ -2,7 +2,6 @@ const publicLinks = [
   { href: '/', label: 'Vestuario 3D' },
   { href: '/cronologia', label: 'Cronología de camisetas' },
   { href: '/museo', label: 'Museo de camisetas' },
-  { href: '/journey', label: 'Journey 2000–2026' },
   { href: '/idolos', label: 'Salón de ídolos' },
   { href: '/bombonera', label: 'La Bombonera 3D' },
   { href: '/trivia', label: 'Trivia xeneize' },

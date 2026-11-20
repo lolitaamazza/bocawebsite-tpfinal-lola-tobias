@@ -39,7 +39,7 @@ function Sticker({ pieza, layout }) {
           className="absolute -top-2 left-1/2 z-10 h-4 w-[55%] -translate-x-1/2 -rotate-3 bg-[#f4ecd6]/60 shadow-sm"
         />
         <div className="relative aspect-[33/40]">
-          <Image src={pieza.image} alt={`Camiseta ${pieza.year}`} fill sizes="9rem" className="object-contain" />
+          <Image src={pieza.image} alt={`Camiseta ${pieza.year}`} fill loading="eager" decoding="async" sizes="9rem" className="object-contain" />
         </div>
       </div>
     </div>
@@ -76,19 +76,16 @@ export function Panel({ pieza, index, total }) {
           style={{ left: `${photo.offset}vw`, top: `${photo.top}%`, width: 'var(--pw)', rotate: `${photo.rotate}deg` }}
         >
           <div data-drift={photo.speed} data-spin={photo.spin} className="will-change-transform">
-            {/* la sombra va afuera: adentro la cortaría el borde rasgado */}
-            <div className="drop-shadow-[0_18px_28px_rgba(0,0,0,0.6)]">
-              <Frame
-                src={foto.src}
-                alt={foto.caption}
-                clip={photo.clip}
-                aspect={photo.aspect}
-                color={layout.color}
-                parallax
-                sizes={`(min-width: 768px) ${Math.round(photo.height * photo.aspect)}vh, 80vw`}
-                className="w-full"
-              />
-            </div>
+            <Frame
+              src={foto.src}
+              alt={foto.caption}
+              clip={photo.clip}
+              aspect={photo.aspect}
+              color={layout.color}
+              parallax
+              sizes={`(min-width: 768px) ${Math.round(photo.height * photo.aspect)}vh, 80vw`}
+              className="w-full"
+            />
             <Credit foto={foto} />
           </div>
           {pieza.image ? <Sticker pieza={pieza} layout={layout} /> : null}

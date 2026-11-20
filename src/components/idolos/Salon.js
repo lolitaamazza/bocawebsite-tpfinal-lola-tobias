@@ -142,7 +142,6 @@ export function Salon() {
       <header className={styles.header}>
         <SiteMenu />
         <SectionBrand title="Salón de" accent="ídolos" />
-        <Link href="/journey" className={`${headerLinkClass} ml-auto hidden sm:block`}>Journey ↗</Link>
       </header>
 
       <div ref={stage} className={styles.stage} onKeyDown={keyboard} tabIndex={0} aria-label="Recorrido de ídolos. Bajá para descubrir su historia y avanzar hacia la derecha.">
@@ -211,7 +210,6 @@ export function Salon() {
         <p className="max-w-[28ch] font-serif text-4xl italic md:text-6xl">El próximo nombre lo escribe el plantel que cuelga en el vestuario.</p>
         <div className="flex flex-wrap justify-center gap-6 font-mono text-xs text-oro uppercase">
           <Link href="/" className={focus}>Volver al vestuario ↗</Link>
-          <Link href="/journey" className={focus}>Journey 2000–2026 ↗</Link>
         </div>
       </section>
     </main>

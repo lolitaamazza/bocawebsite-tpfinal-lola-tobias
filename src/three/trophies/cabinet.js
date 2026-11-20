@@ -10,6 +10,7 @@ export const LOOK = {
   exposure: 1.05,
   environment: 0.95,
   gold: '#e3a945',
+  silver: '#dce5f2',
   ember: '#ff9a3c', // emisivo del estante encendido
   night: '#0a1636', // el fondo se ve azul aunque la luz sea cálida
   lacquer: '#06080d',
@@ -25,16 +26,25 @@ const FADE = 7 // velocidad del encendido y el atenuado (1/s)
 const SPIN = 0.35 // giro de las copas con asas (rad/s)
 const GOLDEN = 2.399963 // ángulo áureo: cada copa arranca girada distinto
 
-const gold = () =>
+const metalMaterial = (kind = 'gold') =>
   new THREE.MeshPhysicalMaterial({
-    color: LOOK.gold,
+    color: kind === 'silver' ? LOOK.silver : LOOK.gold,
     metalness: 1,
-    roughness: 0.25,
-    clearcoat: 0.6,
-    clearcoatRoughness: 0.1,
+    roughness: kind === 'silver' ? 0.18 : 0.24,
+    clearcoat: 0.65,
+    clearcoatRoughness: 0.08,
     emissive: LOOK.ember,
     emissiveIntensity: 0,
     envMapIntensity: LOOK.environment,
+  })
+
+const plinthMaterial = (color = LOOK.lacquer) =>
+  new THREE.MeshPhysicalMaterial({
+    color,
+    roughness: 0.26,
+    clearcoat: 0.9,
+    clearcoatRoughness: 0.08,
+    envMapIntensity: 0.3,
   })
 
 /** Degradé cálido que baja desde la tira de luz sobre el terciopelo (como en el vestuario) */
@@ -169,7 +179,7 @@ export function buildCabinet(cab) {
     envMapIntensity: 0.5,
   })
   const edge = new THREE.MeshBasicMaterial({ color: LOOK.glassEdge, transparent: true, opacity: 0.2, depthWrite: false })
-  const inlay = gold()
+  const inlay = metalMaterial('gold')
 
   const add = (geometry, material, x, y, z) => {
     const m = new THREE.Mesh(geometry, material)
@@ -236,10 +246,13 @@ export function buildCabinet(cab) {
       add(new THREE.BoxGeometry(W - 0.1, r * rise, trophy.layout.rowGap), lacquer, 0, sh.y + (r * rise) / 2, z)
     }
 
-    // las copas
-    const goldMat = gold()
+    // las copas: metal real (plata para Libertadores/Sudamericana/Copa Argentina, oro para Intercontinental/Liga)
+    // y pedestal con el color de su madera caoba o mármol negro + chapitas metálicas
+    const goldMat = metalMaterial(trophy.metal)
+    const baseMat = trophy.plinthColor ? plinthMaterial(trophy.plinthColor) : lacquer
     const body = new THREE.InstancedMesh(goldGeometry(trophy), goldMat, sh.positions.length)
-    const base = new THREE.InstancedMesh(plinthGeometry(trophy), [lacquer, goldMat], sh.positions.length)
+    const base = new THREE.InstancedMesh(plinthGeometry(trophy), [baseMat, goldMat], sh.positions.length)
+    const baseColor = new THREE.Color(trophy.metal === 'silver' ? LOOK.silver : LOOK.gold)
     const phases = sh.positions.map((_, j) => j * GOLDEN + i)
     sh.positions.forEach((p, j) => {
       dummy.position.set(p.x, sh.y + p.y, p.z)
@@ -256,7 +269,7 @@ export function buildCabinet(cab) {
     group.add(body, base)
 
     const box = new THREE.Box3(new THREE.Vector3(-W / 2, sh.y - cab.glass, -D / 2), new THREE.Vector3(W / 2, top, D / 2 + 0.05))
-    return { sh, body, goldMat, ledMat, glowMat, lamp, box, phases, spin: Boolean(trophy.spin), lit: 0, dim: 0 }
+    return { sh, body, goldMat, baseColor, ledMat, glowMat, lamp, box, phases, spin: Boolean(trophy.spin), lit: 0, dim: 0 }
   })
 
   const shadowMesh = new THREE.InstancedMesh(
@@ -276,13 +289,12 @@ export function buildCabinet(cab) {
   group.add(shadowMesh)
   dummy.scale.setScalar(1)
 
-  const baseGold = new THREE.Color(LOOK.gold)
   const led = new THREE.Color(...room.led)
   let highlight = null
 
   /** Aplica el estado de un estante (lit: encendido, dim: atenuado) */
   const paint = (r) => {
-    r.goldMat.color.copy(baseGold).multiplyScalar(1 - 0.5 * r.dim)
+    r.goldMat.color.copy(r.baseColor).multiplyScalar(1 - 0.5 * r.dim)
     r.goldMat.envMapIntensity = LOOK.environment * (1 - 0.45 * r.dim + 0.2 * r.lit)
     r.goldMat.emissiveIntensity = 0.06 * r.lit
     r.lamp.intensity = LOOK.lamp * (1 + 0.4 * r.lit - 0.55 * r.dim)

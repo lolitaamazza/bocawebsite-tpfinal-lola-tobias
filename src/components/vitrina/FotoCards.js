@@ -21,7 +21,7 @@ function Card({ logro, layout }) {
       {foto ? (
         <figure className="relative aspect-[16/11] overflow-hidden bg-noche">
           <div data-vparallax className="absolute inset-x-0 -inset-y-[14%] will-change-transform">
-            <Image src={foto.src} alt={foto.caption} fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
+            <Image src={foto.src} alt={foto.caption} fill loading="eager" decoding="async" sizes="(min-width: 768px) 33vw, 100vw" className="object-cover" />
           </div>
         </figure>
       ) : null}

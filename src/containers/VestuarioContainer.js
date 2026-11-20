@@ -146,6 +146,7 @@ export function VestuarioContainer() {
         sound={sound}
         onSound={() => useVestuario.getState().setSound(!sound)}
         onCustomize={() => customize()}
+        onExplore={() => useVestuario.getState().setView('historia')}
       />
       {error ? <Fallback reason={error} /> : <Loader progress={progress} done={phase === 'intro' || phase === 'ready'} />}
     </main>

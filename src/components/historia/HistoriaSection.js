@@ -13,6 +13,7 @@ import { Panel } from './Panel'
 import { QuickLinks } from './QuickLinks'
 import { SiteMenu } from '@/components/layout/SiteMenu'
 import { Vitrina } from './Vitrina'
+import { BomboneraSection, CarnetSection, IdolosSection, TriviaSection } from './LandingSections'
 
 gsap.registerPlugin(useGSAP, ScrollTrigger)
 
@@ -108,20 +109,26 @@ export function HistoriaSection() {
     const l = new Lenis({
       wrapper,
       content: content.current,
-      lerp: reduced ? 1 : 0.085,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.2,
+      lerp: reduced ? 1 : 0.12,
+      wheelMultiplier: 1.15,
+      touchMultiplier: 1.5,
+      gestureOrientation: 'both',
+      syncTouch: true,
     })
     l.on('scroll', ScrollTrigger.update)
     const raf = (t) => l.raf(t * 1000)
     gsap.ticker.add(raf)
     gsap.ticker.lagSmoothing(0)
     lenis.current = l
+    wrapper.__lenis = l
+    if (typeof window !== 'undefined') window.__bocaLenis = l
     if (useVestuario.getState().view !== 'historia') l.stop()
     return () => {
       gsap.ticker.remove(raf)
       l.destroy()
       lenis.current = null
+      delete wrapper.__lenis
+      if (typeof window !== 'undefined') delete window.__bocaLenis
     }
   }, [mounted])
 
@@ -197,14 +204,14 @@ export function HistoriaSection() {
             { xPercent: 0, opacity: 1, ease: 'power2.out', scrollTrigger: along(y, 'left 98%', 'left 62%') },
           )
         })
-        // el título se imprime de arriba hacia abajo (el recorte deja aire para tildes)
+        // el título entra con transform + opacidad (evita re-rasterizar la máscara SVG print-ink con clip-path por frame)
         strip.querySelectorAll('[data-panel-title]').forEach((t) => {
           gsap.fromTo(
             t,
-            { clipPath: 'inset(-20% -5% 100% -5%)', yPercent: 30 },
+            { yPercent: 26, opacity: 0 },
             {
-              clipPath: 'inset(-20% -5% -20% -5%)',
               yPercent: 0,
+              opacity: 1,
               ease: 'power2.out',
               scrollTrigger: along(t, 'left 92%', 'left 58%'),
             },
@@ -303,7 +310,7 @@ export function HistoriaSection() {
       touchY = null
     }
     const key = (e) => {
-      if (e.key === 'Escape') backTo()
+      if (e.key === 'Escape' && !e.target?.closest?.('input, select, textarea')) backTo()
     }
     el.addEventListener('wheel', wheel, { passive: true })
     el.addEventListener('touchstart', touchStart, { passive: true })
@@ -317,40 +324,74 @@ export function HistoriaSection() {
     }
   }, [open])
 
+  const scrollToSection = (selector) => {
+    const el = layer.current
+    if (!el) return
+    const target = el.querySelector(selector)
+    if (!target) return
+    if (lenis.current) lenis.current.scrollTo(target, { offset: -20 })
+    else target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const chapters = [
+    { id: '#sec-historia', num: '01', label: 'Historia' },
+    { id: '#sec-vitrina', num: '02', label: 'Vitrina' },
+    { id: '#sec-idolos', num: '03', label: 'Ídolos' },
+    { id: '#sec-bombonera', num: '04', label: 'Bombonera' },
+    { id: '#sec-carnet', num: '05', label: 'Carnet' },
+    { id: '#sec-trivia', num: '06', label: 'Trivia' },
+  ]
+
   const atajos = [
     { label: 'Volver al vestuario 3D', hint: 'El plantel 2026, una remera por jugador.', onClick: () => backTo() },
     { label: 'Personalizá tu remera', hint: 'Tu nombre y tu número, en vivo sobre la titular.', onClick: () => backTo('custom') },
-    { label: 'Cronología de camisetas', hint: 'Diez camisetas de Boca en 3D, de 1905 a 2025.', href: '/cronologia' },
-    { label: 'Journey 2000–2026', hint: 'Año por año, de Tokio al plantel de hoy.', href: '/journey' },
-    { label: 'Mis remeras', hint: 'Las que diseñaste y guardaste en tu cuenta.', href: '/mis-remeras' },
-    { label: 'Mi XI ideal', hint: 'Armá el equipo que pondrías vos.', href: '/mi-xi' },
-    { label: 'El museo completo', hint: 'Todas las piezas con sus fuentes.', href: '/museo' },
+    { label: 'Vitrina de trofeos 3D', hint: 'Las 51 copas modeladas en 3D, estante por estante.', onClick: () => scrollToSection('#sec-vitrina') },
+    { label: 'Salón de ídolos', hint: 'Las diez leyendas que marcaron la historia de Boca.', onClick: () => scrollToSection('#sec-idolos') },
+    { label: 'La Bombonera 3D', hint: 'Recorré las bandejas y palcos del Alberto J. Armando.', onClick: () => scrollToSection('#sec-bombonera') },
+    { label: 'Tu carnet de hincha', hint: 'Estampá tu credencial xeneize y descargala en PNG.', onClick: () => scrollToSection('#sec-carnet') },
+    { label: 'Trivia xeneize', hint: 'Diez preguntas con reloj y tabla de posiciones.', onClick: () => scrollToSection('#sec-trivia') },
+    { label: 'Cronología de camisetas 3D', hint: 'Diez camisetas históricas colgadas en su propio riel.', href: '/cronologia' },
+    { label: 'El museo completo', hint: 'Todas las piezas con sus fuentes de archivo.', href: '/museo' },
   ]
 
   return (
     <section
       ref={layer}
       tabIndex={-1}
-      aria-label="Historia en la piel"
+      aria-label="Experiencia Boca Juniors"
       aria-hidden={!open}
       inert={!open}
       className="invisible fixed inset-0 z-[60] overflow-x-hidden overflow-y-auto overscroll-contain bg-[#05080f] text-claro outline-none"
     >
       {mounted ? (
         <div ref={content}>
-          {/* barra fija: volver, nombre de la sección y avance del recorrido */}
-          <header className="pointer-events-none sticky top-0 z-20 flex items-center justify-between gap-4 bg-gradient-to-b from-[#05080f] via-[#05080f]/80 to-transparent px-[clamp(1.25rem,3vw,2.5rem)] pt-4 pb-8">
+          {/* barra fija unificada: volver al vestuario, capítulos de la landing y avance */}
+          <header className="pointer-events-none sticky top-0 z-30 flex items-center justify-between gap-3 bg-gradient-to-b from-[#05080f] via-[#05080f]/90 to-transparent px-[clamp(1.25rem,3vw,2.5rem)] pt-4 pb-8">
             <div className="flex items-center gap-3">
               <SiteMenu />
               <button
                 type="button"
                 onClick={() => backTo()}
-                className="eyebrow pointer-events-auto flex items-center gap-2 text-claro/70 hover:text-claro"
+                className="eyebrow pointer-events-auto flex h-9 items-center gap-2 rounded-full border border-oro/40 bg-fondo/80 px-3.5 text-oro transition-colors hover:bg-oro hover:text-fondo"
               >
-                <span aria-hidden="true">↑</span> Vestuario
+                <span aria-hidden="true">↑</span> Vestuario 3D
               </button>
             </div>
-            <p className="eyebrow hidden text-oro sm:block">Historia en la piel · 1905 — {site.season}</p>
+
+            <nav aria-label="Capítulos de la página" className="pointer-events-auto hidden items-center gap-1 lg:flex">
+              {chapters.map((ch) => (
+                <button
+                  key={ch.id}
+                  type="button"
+                  onClick={() => scrollToSection(ch.id)}
+                  className="eyebrow rounded-full px-3 py-1.5 text-[9px] text-claro/70 transition-colors hover:bg-white/10 hover:text-oro"
+                >
+                  <span className="mr-1 text-oro/70">{ch.num}</span>
+                  {ch.label}
+                </button>
+              ))}
+            </nav>
+
             <p className="eyebrow pointer-events-auto text-claro/70" aria-live="off">
               <span ref={counter}>01</span> / {String(TOTAL).padStart(2, '0')}
             </p>
@@ -360,7 +401,7 @@ export function HistoriaSection() {
           </header>
 
           {/* apertura: afiche impreso (titular en oro gastado, bajada chica, escudo arriba a la derecha) */}
-          <div className="paper-grunge relative -mt-16 flex min-h-dvh flex-col justify-center overflow-hidden px-[clamp(1.25rem,5vw,5rem)] pt-28 pb-24">
+          <div id="sec-historia" className="paper-grunge relative -mt-16 flex min-h-dvh flex-col justify-center overflow-hidden px-[clamp(1.25rem,5vw,5rem)] pt-28 pb-24">
             <div className="absolute top-[clamp(5rem,12vh,7.5rem)] right-[clamp(1.25rem,5vw,5rem)] flex items-center gap-3">
               <span className="hidden text-right font-mono text-[9px] leading-tight tracking-[0.2em] text-oro/80 uppercase sm:block">
                 Club Atlético
@@ -404,8 +445,8 @@ export function HistoriaSection() {
 
           {/* recorrido horizontal: un collage sobre papel, con la línea de tiempo al pie */}
           <div ref={pinWrap} className="relative">
-            <div className="sticky top-0 h-dvh overflow-hidden">
-              <div ref={track} className="paper-grunge relative flex h-full w-max pl-[6vw] will-change-transform">
+            <div className="paper-grunge sticky top-0 h-dvh overflow-hidden">
+              <div ref={track} className="relative flex h-full w-max pl-[6vw] will-change-transform">
                 <span aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[7%] h-px bg-oro/55" />
                 {historia.map((p, i) => (
                   <Panel key={p.id} pieza={p} index={i} total={TOTAL} />
@@ -431,9 +472,13 @@ export function HistoriaSection() {
           </div>
 
           <Vitrina />
+          <IdolosSection />
+          <BomboneraSection />
+          <CarnetSection />
+          <TriviaSection />
 
           {/* atajos */}
-          <div className="py-[18vh]">
+          <div className="border-t border-white/10 py-[14vh]">
             <QuickLinks items={atajos} />
           </div>
 

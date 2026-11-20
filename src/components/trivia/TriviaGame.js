@@ -17,8 +17,9 @@ const DEAD = new Set(['expired', 'finished', 'not-found'])
  * No sabe las respuestas: cada paso es una Server Action que corrige en el
  * servidor. Acá solo vive lo que se muestra.
  */
-export function TriviaGame({ initialSeed = '', initialCategory = 'mixta', counts }) {
+export function TriviaGame({ initialSeed = '', initialCategory = 'mixta', counts, embedded = false }) {
   const router = useRouter()
+  const rootRef = useRef(null)
   const [phase, setPhase] = useState('inicio')
   const [category, setCategory] = useState(initialCategory)
   const [seed, setSeed] = useState(initialSeed)
@@ -72,7 +73,8 @@ export function TriviaGame({ initialSeed = '', initialCategory = 'mixta', counts
       setStreak(0)
       setFinal(null)
       setPhase('jugando')
-      window.scrollTo({ top: 0 })
+      if (embedded) rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      else window.scrollTo({ top: 0 })
     })
 
   const choose = (choice) => {
@@ -112,7 +114,8 @@ export function TriviaGame({ initialSeed = '', initialCategory = 'mixta', counts
         if (res.error) return deadRound(res) || setError(res.error)
         setFinal(res)
         setPhase('final')
-        window.scrollTo({ top: 0 })
+        if (embedded) rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        else window.scrollTo({ top: 0 })
         return
       }
       const res = await nextQuestion(round.roundId, question.index + 1)
@@ -136,37 +139,46 @@ export function TriviaGame({ initialSeed = '', initialCategory = 'mixta', counts
 
   if (phase === 'jugando' && round && question)
     return (
-      <QuestionView
-        roundId={round.roundId}
-        question={question}
-        feedback={feedback}
-        chosen={chosen}
-        busy={busy}
-        score={score}
-        streak={streak}
-        error={error}
-        paused={paused}
-        onChoose={choose}
-        onTimeout={() => choose(NO_ANSWER)}
-        onNext={next}
-      />
+      <div ref={rootRef}>
+        <QuestionView
+          roundId={round.roundId}
+          question={question}
+          feedback={feedback}
+          chosen={chosen}
+          busy={busy}
+          score={score}
+          streak={streak}
+          error={error}
+          paused={paused}
+          onChoose={choose}
+          onTimeout={() => choose(NO_ANSWER)}
+          onNext={next}
+        />
+      </div>
     )
 
-  if (phase === 'final' && final) return <ResultScreen result={final.result} saved={final.saved} displayName={final.displayName} onPlayAgain={playAgain} />
+  if (phase === 'final' && final)
+    return (
+      <div ref={rootRef}>
+        <ResultScreen result={final.result} saved={final.saved} displayName={final.displayName} onPlayAgain={playAgain} />
+      </div>
+    )
 
   return (
-    <StartScreen
-      category={category}
-      onCategory={setCategory}
-      seed={seed}
-      onClearSeed={() => {
-        setSeed('')
-        router.replace(`/trivia?categoria=${category}`, { scroll: false })
-      }}
-      counts={counts}
-      busy={busy}
-      error={error}
-      onStart={start}
-    />
+    <div ref={rootRef}>
+      <StartScreen
+        category={category}
+        onCategory={setCategory}
+        seed={seed}
+        onClearSeed={() => {
+          setSeed('')
+          if (!embedded) router.replace(`/trivia?categoria=${category}`, { scroll: false })
+        }}
+        counts={counts}
+        busy={busy}
+        error={error}
+        onStart={start}
+      />
+    </div>
   )
 }

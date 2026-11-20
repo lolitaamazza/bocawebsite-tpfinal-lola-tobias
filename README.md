@@ -22,14 +22,22 @@ Recorrés la percha del vestuario: una camiseta titular por jugador, con su fich
 ## Funcionalidades
 
 **Públicas**
-- `/` Vestuario 3D: 30 remeras agrupadas por línea, arrastre con inercia, hover con epígrafe, filtros, buscador (`/`), teclado (← → Enter Esc), sonido ambiente sintetizado.
+- `/` **Landing page unificada e interactiva:**
+  - **Vestuario 3D:** 30 remeras del plantel 2026 agrupadas por línea, arrastre con inercia, hover con epígrafe, filtros, buscador (`/`), teclado (← → Enter Esc) y sonido ambiente sintetizado con WebAudio.
+  - **Capítulo 01 · Historia en la piel (1905–2026):** recorrido horizontal tipo collage editorial con las 17 camisetas históricas y fotografías reales de archivo.
+  - **Capítulo 02 · Vitrina de trofeos 3D:** las 51 copas modeladas por código con sus materiales y siluetas reales (Libertadores en plata con pedestal de caoba, chapitas de campeones y futbolista en la cima; Intercontinental en oro; Sudamericana en plata con anillo inclinado; Copa Argentina facetada; Primera División), pre-compilada para carga instantánea.
+  - **Capítulo 03 · Salón de ídolos:** selector interactivo y recorrido por las 10 máximas leyendas del club.
+  - **Capítulo 04 · La Bombonera 3D:** maqueta 3D interactiva del Estadio Alberto J. Armando con vista aérea, vuelo a cinco ubicaciones de tribuna, sonido de hinchada y plano alternativo sin WebGL.
+  - **Capítulo 05 · Tu carnet xeneize:** editor en vivo de carnet de hincha con trama Guilloché, giro frente/dorso, foto local opcional y descarga en PNG.
+  - **Capítulo 06 · Trivia xeneize:** juego de 10 preguntas con temporizador de 20 segundos, corrección en servidor y tabla de posiciones.
 - `/cronologia` El riel 3D del vestuario con diez camisetas históricas en orden cronológico. Arrastrá para recorrer las perchas y abrí una ficha para girar la camiseta. Los años se pueden compartir por enlace y cada ficha conserva la foto de archivo.
+- `/museo` Archivo documental completo de camisetas históricas con sus fuentes.
 - `/dorsal/[dorsal]` Ficha del jugador con la remera en primer plano (se gira arrastrando), retrato, estadísticas y datos. Metadata propia por jugador.
 - `/personaliza` Personalizador: nombre, número y talle estampados en vivo; **Guardar en Mis remeras** (pide ingresar si no hay sesión y vuelve con el diseño).
-- `/bombonera` Maqueta 3D del estadio con vista aérea y cinco ubicaciones de tribuna; incluye sonido opcional y plano alternativo sin WebGL.
-- `/idolos` Recorrido horizontal de diez leyendas controlado por scroll vertical: retrato, identidad, revelado de detalles y transición al siguiente ídolo. Incluye índice directo, progreso, adaptación móvil y lectura vertical con movimiento reducido. Fotografías, fuentes y fichas individuales en `/idolos/[slug]`.
-- `/trivia` Rondas de diez preguntas con reloj, corrección en servidor y fuentes por respuesta; `/trivia/ranking` muestra el ranking público.
-- `/carnet` Carnet de hincha con vista previa, frente y dorso, foto local opcional y descarga en PNG. El borrador se conserva al ingresar desde **Ingresá para guardarlo**.
+- `/bombonera` Vista dedicada de la maqueta 3D del estadio.
+- `/idolos` Vista dedicada del Salón de ídolos y fichas individuales en `/idolos/[slug]`.
+- `/trivia` Vista dedicada de la trivia y `/trivia/ranking` con el ranking público.
+- `/carnet` Vista dedicada del editor de carnet virtual.
 
 **Privadas** (requieren cuenta)
 - `/mis-remeras` ABM de remeras personalizadas: listado con vista previa, `/mis-remeras/nueva`, `/mis-remeras/[id]` (editar y borrar), `/mis-remeras/vestuario` (tus remeras colgadas en el riel 3D).
@@ -40,7 +48,7 @@ Recorrés la percha del vestuario: una camiseta titular por jugador, con su fich
 
 ## Mapa de navegación
 
-El botón **Menú** abre la navegación principal en las cabeceras. Reúne el vestuario, la cronología, el museo, Journey, los ídolos, la Bombonera, la trivia, el carnet, el personalizador y las secciones de cuenta. La página actual queda marcada. Se puede recorrer con Tab y cerrar con Escape o un clic fuera del panel. En pantallas bajas, el panel permite desplazarse para llegar a todos los enlaces.
+El botón **Menú** abre la navegación principal en las cabeceras. Reúne el vestuario, la cronología, el museo, los ídolos, la Bombonera, la trivia, el carnet, el personalizador y las secciones de cuenta. Además, la landing page (`/`) integra una barra fija de capítulos (`01 Historia` · `02 Vitrina` · `03 Ídolos` · `04 Bombonera` · `05 Carnet` · `06 Trivia`) para recorrer toda la experiencia sin salir de la portada. La página actual queda marcada y se puede recorrer con Tab y cerrar con Escape o clic afuera.
 
 ```mermaid
 flowchart LR
@@ -191,11 +199,39 @@ scripts/                datos de Transfermarkt, seed, smoke, drift, clave de ser
 - Modelo 3D de la remera y diseño de la experiencia: basados en [sdhuesca.bellostas.studio](https://sdhuesca.bellostas.studio/) (Bellostas Studio), con crédito en el pie del sitio.
 - Tipografías vía Fontsource (OFL). Nombre y número en Chakra Petch (provisoria).
 
-## Uso de IA
+## Declaración de uso de Inteligencia Artificial (IA)
 
-**Consentimiento.** Usamos Claude Code (Anthropic) como asistente de programación en este proyecto: análisis del sitio de referencia, scripts de datos, textura procedural de la remera, motor del riel 3D, migración de Vite a Next.js, autenticación, ABM, tests y esta documentación. Todo el código pasó por nuestra revisión y podemos explicarlo en la defensa.
+### 1. Consentimiento y herramientas utilizadas
+Durante el desarrollo de este Trabajo Práctico Final utilizamos herramientas de Inteligencia Artificial generativa —**Claude Code (Anthropic)** y **Antigravity (Google DeepMind)**— como asistentes de programación, pair-programming y consulta técnica. Todo el código generado o refactorizado con asistencia de IA fue revisado, probado, ajustado y validado por nosotros (**Lola Amazza** y **Tobías Arraiza**), quienes comprendemos su funcionamiento de punta a punta para su defensa oral y técnica.
 
-**Reflexión.** _(Para completar por Lola y Tobías antes de la entrega: qué aportó la IA, qué hubo que corregir y qué aprendieron.)_
+### 2. ¿En qué partes del proyecto se utilizó la IA?
+* **Modelado 3D procedural y motor gráfico (Three.js + React Three Fiber):**
+  * Asistencia en la matemática del riel 3D (`RailRig`), cálculo de inercia, empuje entre perchas vecinas y péndulo amortiguado de las camisetas (`swing.js`).
+  * Generación procedural por código de los **modelos 3D reales de las 51 copas** de la Vitrina (`src/three/trophies/`) mediante perfiles de revolución (`LatheGeometry`), splines cúbicas monótonas, asas toroidales, pedestales con chapitas de campeones e `InstancedMesh` para dibujar todas las copas con mínimas llamadas de dibujo (*draw calls*).
+  * Pintura dinámica en `<canvas>` 2D sobre el mapa UV del modelo GLB (`paintKit.js`) para estampar escudos, patrocinadores, nombres y dorsales en tiempo real.
+* **Arquitectura Full-Stack en Next.js 16 (App Router) y Firebase:**
+  * Estructuración de **Server Components** y **Server Actions** para los ABM de *Mis remeras*, *Mi XI ideal*, *Mi carnet* y *Trivia xeneize*.
+  * Implementación del flujo de autenticación seguro: intercambio del token de Firebase Auth cliente por una cookie de sesión `HTTP-only` verificada en servidor con `firebase-admin`, protección en `proxy.js` y aislamiento por `userId` en `ownedCollection.js`.
+* **Automatización de datos y suite de tests:**
+  * Creación de scripts en Python (`scripts/fetch_squad.py`, `scripts/fetch_historia.py`) para relevar de forma determinística el plantel 2026 desde Transfermarkt y las fotografías libres desde Wikimedia Commons.
+  * Redacción de **398 tests unitarios en Vitest** que verifican invariantes geométricas de los modelos 3D, validaciones compartidas cliente/servidor, armado del banco de preguntas de la trivia y generación del carnet.
+
+### 3. Intervención humana, criterio propio y correcciones sobre la IA
+La IA no tomó las decisiones de producto ni produjo resultados finales sin iteración; nuestra intervención fue determinante en:
+* **Dirección estética, curaduría e integración en una sola Landing Page:**
+  * Definimos la identidad visual xeneize (estética de afiche editorial oscuro `#05080f`, tramas de imprenta, tipografías *Anton*, *Instrument Serif* y *JetBrains Mono* con acentos en oro `#f0c057`) y decidimos unificar toda la experiencia (Vestuario 3D → Historia en la piel → Vitrina 3D → Salón de Ídolos → La Bombonera 3D → Carnet Virtual → Trivia) en un recorrido continuo y coherente.
+* **Optimización de rendimiento en el scroll horizontal y WebGL:**
+  * *Qué hubo que corregir:* la primera versión del recorrido horizontal de *Historia en la piel* sufría caídas de frames porque combinaba filtros SVG `<feTurbulence>` sobre un contenedor móvil de 15.000 px de ancho con `filter: drop-shadow(...)`, `mix-blend-mode` y animaciones de `clip-path` en cada tarjeta, además de cargar tardíamente la Vitrina 3D con `next/dynamic`.
+  * *Cómo lo resolvimos:* fijamos el fondo `.paper-grunge` al contenedor `sticky` del viewport (`100vw × 100dvh`), reemplazamos las animaciones de `clip-path` y `mix-blend-mode` por transformaciones aceleradas por GPU (`transform + opacity`), pre-decodificamos las imágenes (`loading="eager" decoding="async"`) y pre-compilamos los shaders WebGL de la Vitrina en segundo plano (`gl.compile`) con `frameloop="never"` mientras está fuera de vista.
+* **Fidelidad de los modelos y experiencia de usuario:**
+  * *Qué hubo que corregir:* inicialmente las copas de la Vitrina eran siluetas genéricas todas del mismo color dorado, y una iteración intermedia de efectos de sonido resultaba invasiva. Revertimos los cambios sonoros que no sumaban a la experiencia y rediseñamos los modelos 3D de las copas para que respeten las copas reales que ganó Boca (la Copa Libertadores en plata sobre su pedestal alto de caoba con las filas de chapitas metálicas y el jugador pateando en la cima, la Sudamericana en plata con su globo y anillo inclinado, la Intercontinental en oro, la Copa Argentina facetada y los trofeos de Primera División).
+* **Resolución de incompatibilidades en producción (Vercel + Node 24):**
+  * Diagnosticamos y resolvimos el fallo `ERR_REQUIRE_ESM` de `firebase-admin` en el runtime serverless de Vercel fijando el override de `jwks-rsa@3.2.2` en `package.json`.
+
+### 4. Aprendizajes y reflexión
+1. **Separación entre estado reactivo y bucle de animación 3D:** Aprendimos por qué animar 30 camisetas en 3D a 60/120fps dentro del ciclo de re-render de React degrada el rendimiento, y cómo resolverlo leyendo un store liviano (`zustand.getState()`) y un bus de eventos por cuadro (`frameBus`) desde una clase imperativa (`RailRig`), dejando a React exclusivamente la interfaz superpuesta.
+2. **Seguridad y validación isomórfica en Next.js App Router:** Comprendimos la importancia de no confiar nunca en parámetros enviados desde el cliente en las Server Actions: el `uid` se obtiene exclusivamente verificando la cookie de sesión en el servidor, y las funciones de validación puras en `src/lib/domain/` garantizan las mismas reglas en la vista previa instantánea y en la escritura en Firestore.
+3. **Rol de la IA en el desarrollo de software:** La IA demostró ser un multiplicador enorme para prototipar geometría matemática, shaders y tests exhaustivos, pero aprendimos que **sin criterio humano de arquitectura, perfilado de rendimiento en el navegador y dirección de diseño**, el código generado puede acumular sobrecarga visual o cuellos de botella de GPU. Auditar cada cambio, medir y saber cuándo descartar o reescribir una propuesta de la IA fue clave para lograr un producto fluido y sólido.
 
 
 ## Verificar la cronología en Chrome

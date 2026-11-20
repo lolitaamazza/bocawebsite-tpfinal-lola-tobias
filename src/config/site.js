@@ -19,11 +19,6 @@ export const site = {
     'La Bombonera · La Boca',
     'Hecho con aguante xeneize',
   ],
-  credits: {
-    label: 'Idea y diseño original',
-    name: 'Bellostas Studio',
-    href: 'https://bellostas.studio',
-  },
   store: {
     label: 'BocaShop, la tienda oficial',
     domain: 'bocashop.com.ar',

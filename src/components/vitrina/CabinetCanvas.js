@@ -83,6 +83,23 @@ function Cabinet({ cabinet, active, reduced, highlight, walk, onHover, onTap, on
     w.setHighlight(lit.current)
     world.current = w
 
+    // Posiciona la cámara y pre-compila shaders en el montaje para que el primer cuadro ya quede pintado
+    const aspect = gl.domElement.clientWidth / Math.max(1, gl.domElement.clientHeight)
+    if (reduced) {
+      const o = overview(cabinet, { aspect })
+      camera.position.set(...o.pos)
+      camera.lookAt(...o.target)
+    } else {
+      const { stops, p } = walk.current
+      const wPath = prepareWalk(walkKeys(cabinet, { aspect, stops }))
+      const s = sampleWalk(wPath, p, path.current.out)
+      camera.position.set(s.pos[0], s.pos[1], s.pos[2])
+      camera.lookAt(s.target[0], s.target[1], s.target[2])
+    }
+    w.update(0, 0, false)
+    gl.compile(scene, camera)
+    invalidate()
+
     const canvas = gl.domElement
     const ray = new THREE.Raycaster()
     const ndc = new THREE.Vector2()
@@ -127,7 +144,7 @@ function Cabinet({ cabinet, active, reduced, highlight, walk, onHover, onTap, on
       unmount()
       world.current = null
     }
-  }, [gl, scene, camera, cabinet])
+  }, [gl, scene, camera, cabinet, invalidate, reduced, walk])
 
   useEffect(() => {
     lit.current = highlight

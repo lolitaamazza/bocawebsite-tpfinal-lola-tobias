@@ -6,7 +6,9 @@ import {
   HZ,
   PITCH,
   ROOF,
+  SECTIONS,
   TIERS,
+  TUNNEL,
   UBICACIONES,
   ZONES,
   bandOutline,
@@ -15,11 +17,24 @@ import {
   insidePolygon,
   pathSamples,
   seatLayout,
+  sectionById,
   soffitAt,
   spotSeat,
   zoneAt,
 } from './layout'
-import { aerialPose, flight, fovFor, introPose, seatPose, ubicacionPose } from './views'
+import {
+  aerialPose,
+  flight,
+  fovFor,
+  introPose,
+  seatLookPose,
+  seatPose,
+  sectionOverviewPose,
+  topDownPose,
+  tunnelPose,
+  tunnelToAerialPose,
+  ubicacionPose,
+} from './views'
 
 const SEATS = seatLayout()
 const ASPECTS = [0.46, 0.75, 1, 1.5, 2.2]
@@ -236,5 +251,41 @@ describe('cámaras', () => {
     end.pos.forEach((v, i) => expect(v).toBeCloseTo(to.pos[i], 9))
     const mid = flight(from, to, 0.5)
     expect(mid.pos[1]).toBeGreaterThan((from.pos[1] + to.pos[1]) / 2)
+  })
+
+  it('el túnel mira desde bajo el lado recto hacia el campo y su vuelo termina en el mapa cenital', () => {
+    const t0 = tunnelPose(0)
+    expect(t0.pos[2]).toBeLessThan(TUNNEL.z0)
+    expect(t0.target[2]).toBeGreaterThan(0)
+    for (const a of ASPECTS) {
+      const end = tunnelToAerialPose(1, a, true)
+      const top = topDownPose(a, 0.08)
+      end.pos.forEach((v, i) => expect(v).toBeCloseTo(top.pos[i], 9))
+      end.target.forEach((v, i) => expect(v).toBeCloseTo(top.target[i], 9))
+    }
+  })
+
+  it('la vista cercana de sector mira de frente hacia las filas y seatLookPose permite mirar al tablero LED', () => {
+    for (const u of UBICACIONES) {
+      const s = spotSeat(u)
+      const secPose = sectionOverviewPose(s)
+      expect(Math.hypot(...sub(secPose.target, secPose.pos))).toBeGreaterThan(10)
+      const jumbo = seatLookPose(s, 'jumbotron')
+      expect(jumbo.target[1]).toBeGreaterThan(jumbo.pos[1])
+    }
+  })
+})
+
+describe('ticketing 3D y sectores', () => {
+  it('tiene 33 sectores interactivos con precio, puerta, contorno 3D y butacas destacadas', () => {
+    expect(SECTIONS).toHaveLength(33)
+    for (const sec of SECTIONS) {
+      expect(sectionById(sec.id)).toBe(sec)
+      expect(sec.price).toBeGreaterThan(0)
+      expect(sec.priceLabel).toMatch(/^\$/)
+      expect(sec.available).toBeGreaterThan(0)
+      expect(sec.outline3D.length).toBeGreaterThan(6)
+      expect(sec.featuredSeats.length).toBeGreaterThanOrEqual(9)
+    }
   })
 })

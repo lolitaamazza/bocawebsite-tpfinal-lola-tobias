@@ -2,9 +2,9 @@
 
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import CabinetCanvas from '@/components/vitrina/CabinetCanvas'
 import { FotoCards } from '@/components/vitrina/FotoCards'
 import { itemState, shelfFocus, togglePin } from '@/components/vitrina/focus'
 import { findScroller } from '@/components/vitrina/scroller'
@@ -15,9 +15,6 @@ import { TROPHIES } from '@/three/trophies/profiles'
 import { activeShelf, uniformStops, walkStops } from '@/three/trophies/rig'
 
 gsap.registerPlugin(ScrollTrigger)
-
-// three y el lienzo se bajan recién cuando la vitrina está por entrar en pantalla
-const CabinetCanvas = dynamic(() => import('@/components/vitrina/CabinetCanvas'), { ssr: false })
 
 const ROWS = trophyRows(logros)
 const CABINET = cabinetLayout(ROWS)
@@ -67,7 +64,7 @@ function Total({ logro }) {
         {foto ? (
           <figure data-reveal-up>
             <div className="relative overflow-hidden bg-noche" style={{ aspectRatio: `${foto.width} / ${foto.height}` }}>
-              <Image src={foto.src} alt={foto.caption} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+              <Image src={foto.src} alt={foto.caption} fill loading="eager" decoding="async" sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
             </div>
             <Credit foto={foto} />
           </figure>
@@ -156,7 +153,7 @@ function Item({ row, index, dim, lit, pinned, onEnter, onLeave, onToggle }) {
       {foto ? (
         <figure className="mt-6 w-full max-w-[26rem]">
           <div className="relative aspect-[16/11] overflow-hidden bg-noche">
-            <Image src={foto.src} alt={foto.caption} fill sizes="(min-width: 1024px) 26rem, 90vw" className="object-cover" />
+            <Image src={foto.src} alt={foto.caption} fill loading="eager" decoding="async" sizes="(min-width: 1024px) 26rem, 90vw" className="object-cover" />
           </div>
           <Credit foto={foto} />
         </figure>
@@ -195,20 +192,24 @@ function Gabinete({ onLost }) {
   const active = reduced ? null : scrolled
   const { highlight, label } = shelfFocus({ hover3d, hoverList, pinned, active, stacked: !wide })
 
-  // Se monta (y baja three) al acercarse; dibuja solo mientras está en pantalla.
-  // Fuera de la Historia la capa está corrida abajo de la ventana: tampoco dibuja.
+  // Pre-monta la vitrina en segundo plano apenas abre la Historia (con frameloop="never"
+  // hasta que entra en vista) para que al bajar ya esté compilada y dibujada sin espera.
   useEffect(() => {
     const el = track.current
     if (!el) return
+    const timer = window.setTimeout(() => setMounted(true), 250)
     const io = new IntersectionObserver(
       ([entry]) => {
         setVisible(entry.isIntersecting)
         if (entry.isIntersecting) setMounted(true)
       },
-      { rootMargin: '20% 0px' },
+      { rootMargin: '120% 0px' },
     )
     io.observe(el)
-    return () => io.disconnect()
+    return () => {
+      clearTimeout(timer)
+      io.disconnect()
+    }
   }, [])
 
   // La cámara camina con el scroll de la Historia (una capa fija con scroll propio)
@@ -331,6 +332,7 @@ export function Vitrina() {
 
   return (
     <section
+      id="sec-vitrina"
       aria-labelledby="vitrina-title"
       // sin overflow-hidden en 3D: rompería el sticky del lienzo (clip no crea scroll)
       className={`relative pt-[16vh] ${three ? 'overflow-x-clip pb-[16vh]' : 'overflow-hidden pb-[24vh]'}`}

@@ -10,7 +10,6 @@ export default function sitemap() {
     { url: `${base}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
     { url: `${base}/museo`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/cronologia`, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/journey`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/idolos`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/bombonera`, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/trivia`, changeFrequency: 'monthly', priority: 0.6 },
